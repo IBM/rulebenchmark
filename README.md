@@ -1,2 +1,2 @@
 # rule-mining
-Code related to AI challenge 4190
+Some notebooks related to AI challenge 4190
