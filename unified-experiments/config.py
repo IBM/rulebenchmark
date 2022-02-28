@@ -11,7 +11,8 @@ config_dict= {"CONFIG1" : {
 'TYPE' : 'BINARY',
 'EXAMPLE_FEATURE' : 'Est Income',
 'POS_CLASS': 'T',
-'BASELINE': True
+'BASELINE': True,
+'USECASE': None
 },
 "CONFIG2" : { 
 'NAME' : 'continuous-churn', 
@@ -26,7 +27,8 @@ config_dict= {"CONFIG1" : {
 'TYPE' : 'CONTINUOUS',
 'EXAMPLE_FEATURE' : 'Est Income',
 'POS_CLASS': None,
-'BASELINE': True
+'BASELINE': True,
+'USECASE': None
 },
 "CONFIG3" : { 
 'NAME' : 'bike-demand', 
@@ -41,7 +43,8 @@ config_dict= {"CONFIG1" : {
 'TYPE' : 'CONTINUOUS',
 'EXAMPLE_FEATURE' : 'Dew point temperature(C)',
 'POS_CLASS': None,
-'BASELINE': True
+'BASELINE': True,
+'USECASE': None
 },
 "CONFIG4" : { 
 'NAME' : 'heloc', 
@@ -56,7 +59,8 @@ config_dict= {"CONFIG1" : {
 'TYPE' : 'CONTINUOUS',
 'EXAMPLE_FEATURE' : 'ExternalRiskEstimate',
 'POS_CLASS': None,
-'BASELINE': True
+'BASELINE': True,
+'USECASE': None
 },
 "CONFIG5" : { 
 'NAME' : 'taiwan-credit', 
@@ -71,7 +75,8 @@ config_dict= {"CONFIG1" : {
 'TYPE' : 'CONTINUOUS',
 'EXAMPLE_FEATURE' : 'Amount',
 'POS_CLASS': None,
-'BASELINE': True
+'BASELINE': True,
+'USECASE': None
 },
 "CONFIG6" : { 
 'NAME' : 'german-credit-brcg', 
@@ -81,12 +86,13 @@ config_dict= {"CONFIG1" : {
 'MODE': 'PREDICTIVE',
 'TRAIN_TEST_SPLIT': 0.3,
 'BINARIZER': 'QUANTILE',
-'ALGO': 'BRCG',
+'ALGO': 'CORELS',
 'TARGET_LABEL': 'Target',
 'TYPE' : 'BINARY',
 'EXAMPLE_FEATURE' : 'Credit Amount',
 'POS_CLASS': 0,
-'BASELINE': True
+'BASELINE': True,
+'USECASE': None
 
 },
 "CONFIG7" : { 
@@ -102,7 +108,8 @@ config_dict= {"CONFIG1" : {
 'TYPE' : 'BINARY',
 'EXAMPLE_FEATURE' : 'Credit Amount',
 'POS_CLASS': 0,
-'BASELINE': True
+'BASELINE': True,
+'USECASE': None
 },
 "CONFIG8" : { 
 'NAME' : 'binary-churn-ripper', 
@@ -117,7 +124,8 @@ config_dict= {"CONFIG1" : {
 'TYPE' : 'BINARY',
 'EXAMPLE_FEATURE' : 'Est Income',
 'POS_CLASS': 'T',
-'BASELINE': True
+'BASELINE': True,
+'USECASE': None
 },
 
 "CONFIG9" : { 
@@ -133,7 +141,8 @@ config_dict= {"CONFIG1" : {
 'TYPE' : 'BINARY',
 'EXAMPLE_FEATURE' : 'current-charge-degree',
 'POS_CLASS': 0,
-'BASELINE': True
+'BASELINE': True,
+'USECASE': None
 },
 
 "CONFIG10" : { 
@@ -149,7 +158,8 @@ config_dict= {"CONFIG1" : {
 'TYPE' : 'BINARY',
 'EXAMPLE_FEATURE' : 'Cap-color',
 'POS_CLASS': "e",
-'BASELINE': True
+'BASELINE': True,
+'USECASE': None
 },
 
 "CONFIG11" : { 
@@ -165,7 +175,24 @@ config_dict= {"CONFIG1" : {
 'TYPE' : 'BINARY',
 'EXAMPLE_FEATURE' : 'V6',
 'POS_CLASS': 1,
-'BASELINE': True
+'BASELINE': True,
+'USECASE': None
+},
+"CONFIG12" : { 
+'NAME' : 'taiwan_binary', 
+'DATA_SET': '../data/TaiwanCreditData.csv',
+'DATA_TYPES': {},
+'DROP': ["Probabilities"],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'NATIVE',
+'ALGO': 'RIPPER',
+'TARGET_LABEL': 'DefaultNextMonth',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'PayAmount_Apr',
+'POS_CLASS': 1,
+'BASELINE': True,
+'USECASE': None
 }}
 
 
