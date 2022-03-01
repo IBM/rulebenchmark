@@ -209,6 +209,21 @@ config_dict= {"CONFIG1" : {
 'POS_CLASS': 'Good',
 'BASELINE': True,
 'USECASE': None
+},"CONFIG14" : { 
+'NAME' : 'binary_bike', 
+'DATA_SET': '../data/binary_bike.csv',
+'DATA_TYPES': {},
+'DROP': ['Rented Bike Count', 'Unnamed: 0'],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'QUANTILE',
+'ALGO': 'BRCG',
+'TARGET_LABEL': 'Target',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'Target',
+'POS_CLASS': 1,
+'BASELINE': True,
+'USECASE': None
 }}
 
 
