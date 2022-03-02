@@ -224,7 +224,23 @@ config_dict= {"CONFIG1" : {
 'POS_CLASS': 1,
 'BASELINE': True,
 'USECASE': None
-}}
+},"CONFIG15" : { 
+'NAME' : 'miniloan', 
+'DATA_SET': '../data/miniloan-decisions-100K.csv',
+'DATA_TYPES': {},
+'DROP': ["Unnamed: 0"],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'QUANTILE',
+'ALGO': 'BRCG',
+'TARGET_LABEL': 'approval',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'income',
+'POS_CLASS': False,
+'BASELINE': True,
+'USECASE': None
+}
+}
 
 
 
@@ -233,8 +249,7 @@ Config_list = []
 
 for config in config_dict.items():
     Config_list.append(config)
+    
 
 
 
-
-print(Config_list)
