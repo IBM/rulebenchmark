@@ -243,11 +243,83 @@ config_dict= {"CONFIG1" : {
 }
 
 
+# Imbalanced Configs
+
+config_dict_imbalanced= {"CONFIG1" : { 
+'NAME' : 'german-credit-brcg', 
+'DATA_SET': '../data/german_credit_codiert.csv',
+'DATA_TYPES': {},
+'DROP': ['Index'],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'QUANTILE',
+'ALGO': 'BRCG',
+'TARGET_LABEL': 'Target',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'Credit Amount',
+'POS_CLASS': 0,
+'BASELINE': True,
+'USECASE': None
+
+
+},
+"CONFIG2" : { 
+'NAME' : 'fraud_detection', 
+'DATA_SET': '../data/fraud_detection.csv',
+'DATA_TYPES': {},
+'DROP': [],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'QUANTILE',
+'ALGO': 'BRCG',
+'TARGET_LABEL': 'Class',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'V6',
+'POS_CLASS': 1,
+'BASELINE': True,
+'USECASE': None
+},
+"CONFIG3" : { 
+'NAME' : 'taiwan_binary', 
+'DATA_SET': '../data/TaiwanCreditData.csv',
+'DATA_TYPES': {},
+'DROP': ["Probabilities"],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'QUANTILE',
+'ALGO': 'BRCG',
+'TARGET_LABEL': 'DefaultNextMonth',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'PayAmount_Apr',
+'POS_CLASS': 1,
+'BASELINE': True,
+'USECASE': None
+},
+"CONFIG4" : { 
+'NAME' : 'miniloan', 
+'DATA_SET': '../data/miniloan-decisions-100K.csv',
+'DATA_TYPES': {},
+'DROP': ["Unnamed: 0"],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'QUANTILE',
+'ALGO': 'BRCG',
+'TARGET_LABEL': 'approval',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'income',
+'POS_CLASS': False,
+'BASELINE': True,
+'USECASE': None
+}
+}
+
+
+
 
 
 Config_list = []
 
-for config in config_dict.items():
+for config in config_dict_imbalanced.items():
     Config_list.append(config)
     
 
