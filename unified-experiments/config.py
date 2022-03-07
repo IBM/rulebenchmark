@@ -248,6 +248,117 @@ config_dict= {"CONFIG1" : {
 config_dict_imbalanced= {"CONFIG-I1" : { 
 'NAME' : 'german-credit-brcg', 
 'DATA_SET': '../data/german_credit_codiert.csv',
+'DATA_TYPES': {'Duration in Month': float, 'Credit Amount': float, 'Installmentrate %': float, 'PresentResidence': float, 'Age in years': float, 'Number existing Credits': float, 'Number people liable': float},
+'DROP': ['Index'],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'NATIVE',
+'ALGO': 'RIPPER',
+'TARGET_LABEL': 'Target',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'Credit Amount',
+'POS_CLASS': 0,
+'BASELINE': False,
+'ONEHOT': False
+
+
+},
+"CONFIG-I2" : { 
+'NAME' : 'german-credit-brcg', 
+'DATA_SET': '../data/german_credit_codiert.csv',
+'DATA_TYPES': {},
+'DROP': ['Index'],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'TREES',
+'ALGO': 'RIPPER',
+'TARGET_LABEL': 'Target',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'Credit Amount',
+'POS_CLASS': 0,
+'BASELINE': False,
+'ONEHOT': False
+
+
+},
+"CONFIG-I3" : { 
+'NAME' : 'german-credit-brcg', 
+'DATA_SET': '../data/german_credit_codiert.csv',
+'DATA_TYPES': {},
+'DROP': ['Index'],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'QUANTILE',
+'ALGO': 'RIPPER',
+'TARGET_LABEL': 'Target',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'Credit Amount',
+'POS_CLASS': 0,
+'BASELINE': False,
+'ONEHOT': False
+
+
+},
+"CONFIG-I4" : { 
+'NAME' : 'german-credit-brcg', 
+'DATA_SET': '../data/german_credit_codiert.csv',
+'DATA_TYPES': {},
+'DROP': ['Index'],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'TREES',
+'ALGO': 'BRCG',
+'TARGET_LABEL': 'Target',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'Credit Amount',
+'POS_CLASS': 0,
+'BASELINE': False,
+'ONEHOT': False
+
+
+},
+
+"CONFIG-I5" : { 
+'NAME' : 'german-credit-brcg', 
+'DATA_SET': '../data/german_credit_codiert.csv',
+'DATA_TYPES': {},
+'DROP': ['Index'],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'QUANTILE',
+'ALGO': 'BRCG',
+'TARGET_LABEL': 'Target',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'Credit Amount',
+'POS_CLASS': 0,
+'BASELINE': False,
+'ONEHOT': False
+
+
+},
+
+"CONFIG-I6" : { 
+'NAME' : 'german-credit-brcg', 
+'DATA_SET': '../data/german_credit_codiert.csv',
+'DATA_TYPES': {},
+'DROP': ['Index'],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'TREES',
+'ALGO': 'CORELS',
+'TARGET_LABEL': 'Target',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'Credit Amount',
+'POS_CLASS': 0,
+'BASELINE': False,
+'ONEHOT': False
+
+
+},
+
+"CONFIG-I7" : { 
+'NAME' : 'german-credit-brcg', 
+'DATA_SET': '../data/german_credit_codiert.csv',
 'DATA_TYPES': {},
 'DROP': ['Index'],
 'MODE': 'PREDICTIVE',
@@ -258,10 +369,47 @@ config_dict_imbalanced= {"CONFIG-I1" : {
 'TYPE' : 'BINARY',
 'EXAMPLE_FEATURE' : 'Credit Amount',
 'POS_CLASS': 0,
+'BASELINE': False,
+'ONEHOT': False
+
+
+},
+
+
+"CONFIG-I8" : { 
+'NAME' : 'fraud_detection', 
+'DATA_SET': '../data/fraud_detection.csv',
+'DATA_TYPES': {},
+'DROP': [],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'NATIVE',
+'ALGO': 'RIPPER',
+'TARGET_LABEL': 'Class',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'V6',
+'POS_CLASS': 1,
 'BASELINE': True,
 'ONEHOT': False
 },
-"CONFIG-I2" : { 
+"CONFIG-I9" : { 
+'NAME' : 'fraud_detection', 
+'DATA_SET': '../data/fraud_detection.csv',
+'DATA_TYPES': {},
+'DROP': [],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'TREES',
+'ALGO': 'RIPPER',
+'TARGET_LABEL': 'Class',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'V6',
+'POS_CLASS': 1,
+'BASELINE': False,
+'ONEHOT': False
+},
+
+"CONFIG-I10" : { 
 'NAME' : 'fraud_detection', 
 'DATA_SET': '../data/fraud_detection.csv',
 'DATA_TYPES': {},
@@ -274,10 +422,114 @@ config_dict_imbalanced= {"CONFIG-I1" : {
 'TYPE' : 'BINARY',
 'EXAMPLE_FEATURE' : 'V6',
 'POS_CLASS': 1,
-'BASELINE': True,
+'BASELINE': False,
 'ONEHOT': False
 },
-"CONFIG-I3" : { 
+
+"CONFIG-I11" : { 
+'NAME' : 'fraud_detection', 
+'DATA_SET': '../data/fraud_detection.csv',
+'DATA_TYPES': {},
+'DROP': [],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'QUANTILE',
+'ALGO': 'BRCG',
+'TARGET_LABEL': 'Class',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'V6',
+'POS_CLASS': 1,
+'BASELINE': False,
+'ONEHOT': False
+},
+
+"CONFIG-I12" : { 
+'NAME' : 'fraud_detection', 
+'DATA_SET': '../data/fraud_detection.csv',
+'DATA_TYPES': {},
+'DROP': [],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'QUANTILE',
+'ALGO': 'BRCG',
+'TARGET_LABEL': 'Class',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'V6',
+'POS_CLASS': 1,
+'BASELINE': False,
+'ONEHOT': False
+},
+
+"CONFIG-I13" : { 
+'NAME' : 'fraud_detection', 
+'DATA_SET': '../data/fraud_detection.csv',
+'DATA_TYPES': {},
+'DROP': [],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'QUANTILE',
+'ALGO': 'CORELS',
+'TARGET_LABEL': 'Class',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'V6',
+'POS_CLASS': 1,
+'BASELINE': False,
+'ONEHOT': False
+},
+
+
+"CONFIG-I14" : { 
+'NAME' : 'fraud_detection', 
+'DATA_SET': '../data/fraud_detection.csv',
+'DATA_TYPES': {},
+'DROP': [],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'TREES',
+'ALGO': 'CORELS',
+'TARGET_LABEL': 'Class',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'V6',
+'POS_CLASS': 1,
+'BASELINE': False,
+'ONEHOT': False
+},
+
+
+"CONFIG-I15" : { 
+'NAME' : 'taiwan_binary', 
+'DATA_SET': '../data/TaiwanCreditData.csv',
+'DATA_TYPES': {'Amount': float, 'Age': float, 'Bill_Sep': float, 'Bill_Aug': float, 'Bill_Jul': float, 'Bill_Jun': float, 'Bill_May': float, 'Bill_Apr': float, 'PayAmount_Sep': float, 'PayAmount_Aug': float, 'PayAmount_Jul': float, 'PayAmount_Jun': float, 'PayAmount_May': float, 'PayAmount_Apr': float},
+'DROP': ["Probabilities"],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'NATIVE',
+'ALGO': 'RIPPER',
+'TARGET_LABEL': 'DefaultNextMonth',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'PayAmount_Apr',
+'POS_CLASS': 1,
+'BASELINE': False,
+'ONEHOT': False
+},
+"CONFIG-I16" : { 
+'NAME' : 'taiwan_binary', 
+'DATA_SET': '../data/TaiwanCreditData.csv',
+'DATA_TYPES': {},
+'DROP': ["Probabilities"],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'TREES',
+'ALGO': 'RIPPER',
+'TARGET_LABEL': 'DefaultNextMonth',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'PayAmount_Apr',
+'POS_CLASS': 1,
+'BASELINE': False,
+'ONEHOT': False
+},
+
+"CONFIG-I17" : { 
 'NAME' : 'taiwan_binary', 
 'DATA_SET': '../data/TaiwanCreditData.csv',
 'DATA_TYPES': {},
@@ -290,14 +542,262 @@ config_dict_imbalanced= {"CONFIG-I1" : {
 'TYPE' : 'BINARY',
 'EXAMPLE_FEATURE' : 'PayAmount_Apr',
 'POS_CLASS': 1,
-'BASELINE': True,
+'BASELINE': False,
 'ONEHOT': False
 },
-"CONFIG-I4" : { 
-'NAME' : 'miniloan-RIPPER', 
+
+"CONFIG-I18" : { 
+'NAME' : 'taiwan_binary', 
+'DATA_SET': '../data/TaiwanCreditData.csv',
+'DATA_TYPES': {},
+'DROP': ["Probabilities"],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'QUANTILE',
+'ALGO': 'BRCG',
+'TARGET_LABEL': 'DefaultNextMonth',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'PayAmount_Apr',
+'POS_CLASS': 1,
+'BASELINE': False,
+'ONEHOT': False
+},
+
+
+"CONFIG-I19" : { 
+'NAME' : 'taiwan_binary', 
+'DATA_SET': '../data/TaiwanCreditData.csv',
+'DATA_TYPES': {},
+'DROP': ["Probabilities"],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'TREES',
+'ALGO': 'BRCG',
+'TARGET_LABEL': 'DefaultNextMonth',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'PayAmount_Apr',
+'POS_CLASS': 1,
+'BASELINE': False,
+'ONEHOT': False
+},
+
+"CONFIG-I20" : { 
+'NAME' : 'taiwan_binary', 
+'DATA_SET': '../data/TaiwanCreditData.csv',
+'DATA_TYPES': {},
+'DROP': ["Probabilities"],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'TREES',
+'ALGO': 'CORELS',
+'TARGET_LABEL': 'DefaultNextMonth',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'PayAmount_Apr',
+'POS_CLASS': 1,
+'BASELINE': False,
+'ONEHOT': False
+},
+
+"CONFIG-I21" : { 
+'NAME' : 'taiwan_binary', 
+'DATA_SET': '../data/TaiwanCreditData.csv',
+'DATA_TYPES': {},
+'DROP': ["Probabilities"],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'QUANTILE',
+'ALGO': 'CORELS',
+'TARGET_LABEL': 'DefaultNextMonth',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'PayAmount_Apr',
+'POS_CLASS': 1,
+'BASELINE': False,
+'ONEHOT': False
+},
+
+
+"CONFIG-I22" : { 
+'NAME' : 'miniloan', 
 'DATA_SET': '../data/miniloan-decisions-100K.csv',
 'DATA_TYPES': {'creditScore': float, 'income': float, 'loanAmount': float, 'monthDuration': float, 'yearlyReimbursement': float},
-'DROP': ["Unnamed: 0"],
+'DROP': ["Unnamed: 0", "name"],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'NATIVE',
+'ALGO': 'RIPPER',
+'TARGET_LABEL': 'approval',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'income',
+'POS_CLASS': False,
+'BASELINE': False,
+'ONEHOT': False
+},
+
+
+"CONFIG-I23" : { 
+'NAME' : 'miniloan', 
+'DATA_SET': '../data/miniloan-decisions-100K.csv',
+'DATA_TYPES': {},
+'DROP': ["Unnamed: 0", "name"],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'TREES',
+'ALGO': 'RIPPER',
+'TARGET_LABEL': 'approval',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'income',
+'POS_CLASS': False,
+'BASELINE': False,
+'ONEHOT': False
+},
+
+
+"CONFIG-I24" : { 
+'NAME' : 'miniloan', 
+'DATA_SET': '../data/miniloan-decisions-100K.csv',
+'DATA_TYPES': {},
+'DROP': ["Unnamed: 0", "name"],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'QUANTILE',
+'ALGO': 'RIPPER',
+'TARGET_LABEL': 'approval',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'income',
+'POS_CLASS': False,
+'BASELINE': False,
+'ONEHOT': False
+}
+,
+
+
+"CONFIG-I25" : { 
+'NAME' : 'miniloan', 
+'DATA_SET': '../data/miniloan-decisions-100K.csv',
+'DATA_TYPES': {},
+'DROP': ["Unnamed: 0", "name"],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'QUANTILE',
+'ALGO': 'BRCG',
+'TARGET_LABEL': 'approval',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'income',
+'POS_CLASS': False,
+'BASELINE': False,
+'ONEHOT': False
+},
+
+
+"CONFIG-I26" : { 
+'NAME' : 'miniloan', 
+'DATA_SET': '../data/miniloan-decisions-100K.csv',
+'DATA_TYPES': {},
+'DROP': ["Unnamed: 0", "name"],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'TREES',
+'ALGO': 'BRCG',
+'TARGET_LABEL': 'approval',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'income',
+'POS_CLASS': False,
+'BASELINE': False,
+'ONEHOT': False
+}
+
+,
+
+
+"CONFIG-I27" : { 
+'NAME' : 'miniloan', 
+'DATA_SET': '../data/miniloan-decisions-100K.csv',
+'DATA_TYPES': {},
+'DROP': ["Unnamed: 0", "name"],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'TREES',
+'ALGO': 'CORELS',
+'TARGET_LABEL': 'approval',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'income',
+'POS_CLASS': False,
+'BASELINE': False,
+'ONEHOT': False
+},
+"CONFIG-I28" : { 
+'NAME' : 'miniloan', 
+'DATA_SET': '../data/miniloan-decisions-100K.csv',
+'DATA_TYPES': {},
+'DROP': ["Unnamed: 0", "name"],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'QUANTILE',
+'ALGO': 'CORELS',
+'TARGET_LABEL': 'approval',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'income',
+'POS_CLASS': False,
+'BASELINE': False,
+'ONEHOT': False
+},
+"CONFIG-I29" : { 
+'NAME' : 'german-credit-brcg', 
+'DATA_SET': '../data/german_credit_codiert.csv',
+'DATA_TYPES': {},
+'DROP': ['Index'],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'NATIVE',
+'ALGO': 'RIPPER',
+'TARGET_LABEL': 'Target',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'Credit Amount',
+'POS_CLASS': 0,
+'BASELINE': True,
+'ONEHOT': True
+},
+
+
+"CONFIG-I30" : { 
+'NAME' : 'fraud_detection', 
+'DATA_SET': '../data/fraud_detection.csv',
+'DATA_TYPES': {'Duration in Month': float, 'Credit Amount': float, 'Installmentrate %': float, 'PresentResidence': float, 'Age in years': float, 'Number existing Credits': float, 'Number people liable': float},
+'DROP': [],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'NATIVE',
+'ALGO': 'RIPPER',
+'TARGET_LABEL': 'Class',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'V6',
+'POS_CLASS': 1,
+'BASELINE': True,
+'UNDERSAMP': True,
+'ONEHOT': False
+},
+
+"CONFIG-I31" : { 
+'NAME' : 'taiwan_binary', 
+'DATA_SET': '../data/TaiwanCreditData.csv',
+'DATA_TYPES': {'Amount': float, 'Age': float, 'Bill_Sep': float, 'Bill_Aug': float, 'Bill_Jul': float, 'Bill_Jun': float, 'Bill_May': float, 'Bill_Apr': float, 'PayAmount_Sep': float, 'PayAmount_Aug': float, 'PayAmount_Jul': float, 'PayAmount_Jun': float, 'PayAmount_May': float, 'PayAmount_Apr': float},
+'DROP': ["Probabilities"],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'NATIVE',
+'ALGO': 'RIPPER',
+'TARGET_LABEL': 'DefaultNextMonth',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'PayAmount_Apr',
+'POS_CLASS': 1,
+'BASELINE': True,
+'ONEHOT': True
+},
+"CONFIG-I32" : { 
+'NAME' : 'miniloan', 
+'DATA_SET': '../data/miniloan-decisions-100K.csv',
+'DATA_TYPES': {},
+'DROP': ["Unnamed: 0", "name"],
 'MODE': 'PREDICTIVE',
 'TRAIN_TEST_SPLIT': 0.3,
 'BINARIZER': 'NATIVE',
@@ -307,6 +807,160 @@ config_dict_imbalanced= {"CONFIG-I1" : {
 'EXAMPLE_FEATURE' : 'income',
 'POS_CLASS': False,
 'BASELINE': True,
+'ONEHOT': False
+},
+
+
+"CONFIG-I33" : { 
+'NAME' : 'fraud_detection', 
+'DATA_SET': '../data/fraud_detection.csv',
+'DATA_TYPES': {'Duration in Month': float, 'Credit Amount': float, 'Installmentrate %': float, 'PresentResidence': float, 'Age in years': float, 'Number existing Credits': float, 'Number people liable': float},
+'DROP': [],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'NATIVE',
+'ALGO': 'RIPPER',
+'TARGET_LABEL': 'Class',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'V6',
+'POS_CLASS': 1,
+'BASELINE': False,
+'UNDERSAMP': True,
+'ONEHOT': False
+},
+
+
+"CONFIG-I34" : { 
+'NAME' : 'fraud_detection', 
+'DATA_SET': '../data/fraud_detection.csv',
+'DATA_TYPES': {},
+'DROP': [],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'TREES',
+'ALGO': 'RIPPER',
+'TARGET_LABEL': 'Class',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'V6',
+'POS_CLASS': 1,
+'BASELINE': False,
+'UNDERSAMP': True,
+'ONEHOT': False
+},
+
+
+"CONFIG-I35" : { 
+'NAME' : 'fraud_detection', 
+'DATA_SET': '../data/fraud_detection.csv',
+'DATA_TYPES': {},
+'DROP': [],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'QUANTILE',
+'ALGO': 'RIPPER',
+'TARGET_LABEL': 'Class',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'V6',
+'POS_CLASS': 1,
+'BASELINE': False,
+'UNDERSAMP': True,
+'ONEHOT': False
+},
+
+
+"CONFIG-I36" : { 
+'NAME' : 'fraud_detection', 
+'DATA_SET': '../data/fraud_detection.csv',
+'DATA_TYPES': {},
+'DROP': [],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'QUANTILE',
+'ALGO': 'BRCG',
+'TARGET_LABEL': 'Class',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'V6',
+'POS_CLASS': 1,
+'BASELINE': False,
+'UNDERSAMP': True,
+'ONEHOT': False
+},
+
+
+"CONFIG-I37" : { 
+'NAME' : 'fraud_detection', 
+'DATA_SET': '../data/fraud_detection.csv',
+'DATA_TYPES': {},
+'DROP': [],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'TREES',
+'ALGO': 'BRCG',
+'TARGET_LABEL': 'Class',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'V6',
+'POS_CLASS': 1,
+'BASELINE': False,
+'UNDERSAMP': True,
+'ONEHOT': False
+},
+
+
+"CONFIG-I38" : { 
+'NAME' : 'fraud_detection', 
+'DATA_SET': '../data/fraud_detection.csv',
+'DATA_TYPES': {},
+'DROP': [],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'TREES',
+'ALGO': 'CORELS',
+'TARGET_LABEL': 'Class',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'V6',
+'POS_CLASS': 1,
+'BASELINE': False,
+'UNDERSAMP': True,
+'ONEHOT': False
+}
+
+,
+
+
+"CONFIG-I39" : { 
+'NAME' : 'fraud_detection', 
+'DATA_SET': '../data/fraud_detection.csv',
+'DATA_TYPES': {},
+'DROP': [],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'QUANTILE',
+'ALGO': 'CORELS',
+'TARGET_LABEL': 'Class',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'V6',
+'POS_CLASS': 1,
+'BASELINE': False,
+'UNDERSAMP': True,
+'ONEHOT': False
+},
+
+
+"CONFIG-I40" : { 
+'NAME' : 'fraud_detection', 
+'DATA_SET': '../data/fraud_detection.csv',
+'DATA_TYPES': {},
+'DROP': [],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'NATIVE',
+'ALGO': 'RIPPER',
+'TARGET_LABEL': 'Class',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'V6',
+'POS_CLASS': 1,
+'BASELINE': True,
+'UNDERSAMP': True,
 'ONEHOT': False
 }
 }
