@@ -245,7 +245,7 @@ config_dict= {"CONFIG1" : {
 
 # Imbalanced Configs
 
-config_dict_imbalanced= {"CONFIG1" : { 
+config_dict_imbalanced= {"CONFIG-I1" : { 
 'NAME' : 'german-credit-brcg', 
 'DATA_SET': '../data/german_credit_codiert.csv',
 'DATA_TYPES': {},
@@ -260,10 +260,8 @@ config_dict_imbalanced= {"CONFIG1" : {
 'POS_CLASS': 0,
 'BASELINE': True,
 'ONEHOT': False
-
-
 },
-"CONFIG2" : { 
+"CONFIG-I2" : { 
 'NAME' : 'fraud_detection', 
 'DATA_SET': '../data/fraud_detection.csv',
 'DATA_TYPES': {},
@@ -279,7 +277,7 @@ config_dict_imbalanced= {"CONFIG1" : {
 'BASELINE': True,
 'ONEHOT': False
 },
-"CONFIG3" : { 
+"CONFIG-I3" : { 
 'NAME' : 'taiwan_binary', 
 'DATA_SET': '../data/TaiwanCreditData.csv',
 'DATA_TYPES': {},
@@ -295,11 +293,11 @@ config_dict_imbalanced= {"CONFIG1" : {
 'BASELINE': True,
 'ONEHOT': False
 },
-"CONFIG4" : { 
-'NAME' : 'miniloan', 
+"CONFIG-I4" : { 
+'NAME' : 'miniloan-RIPPER', 
 'DATA_SET': '../data/miniloan-decisions-100K.csv',
-'DATA_TYPES': {},
-'DROP': ["Unnamed: 0", "name"],
+'DATA_TYPES': {'creditScore': float, 'income': float, 'loanAmount': float, 'monthDuration': float, 'yearlyReimbursement': float},
+'DROP': ["Unnamed: 0"],
 'MODE': 'PREDICTIVE',
 'TRAIN_TEST_SPLIT': 0.3,
 'BINARIZER': 'NATIVE',
