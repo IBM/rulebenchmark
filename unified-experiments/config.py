@@ -107,7 +107,7 @@ config_dict= {"CONFIG1" : {
 'TARGET_LABEL': 'Target',
 'TYPE' : 'BINARY',
 'EXAMPLE_FEATURE' : 'Credit Amount',
-'POS_CLASS': 0,
+'POS_CLASS': 1,
 'BASELINE': True,
 'USECASE': None
 },
@@ -253,13 +253,13 @@ config_dict_imbalanced= {"CONFIG1" : {
 'MODE': 'PREDICTIVE',
 'TRAIN_TEST_SPLIT': 0.3,
 'BINARIZER': 'QUANTILE',
-'ALGO': 'BRCG',
+'ALGO': 'CORELS',
 'TARGET_LABEL': 'Target',
 'TYPE' : 'BINARY',
 'EXAMPLE_FEATURE' : 'Credit Amount',
 'POS_CLASS': 0,
 'BASELINE': True,
-'USECASE': None
+'ONEHOT': False
 
 
 },
@@ -271,13 +271,13 @@ config_dict_imbalanced= {"CONFIG1" : {
 'MODE': 'PREDICTIVE',
 'TRAIN_TEST_SPLIT': 0.3,
 'BINARIZER': 'QUANTILE',
-'ALGO': 'BRCG',
+'ALGO': 'RIPPER',
 'TARGET_LABEL': 'Class',
 'TYPE' : 'BINARY',
 'EXAMPLE_FEATURE' : 'V6',
 'POS_CLASS': 1,
 'BASELINE': True,
-'USECASE': None
+'ONEHOT': False
 },
 "CONFIG3" : { 
 'NAME' : 'taiwan_binary', 
@@ -287,29 +287,29 @@ config_dict_imbalanced= {"CONFIG1" : {
 'MODE': 'PREDICTIVE',
 'TRAIN_TEST_SPLIT': 0.3,
 'BINARIZER': 'QUANTILE',
-'ALGO': 'BRCG',
+'ALGO': 'RIPPER',
 'TARGET_LABEL': 'DefaultNextMonth',
 'TYPE' : 'BINARY',
 'EXAMPLE_FEATURE' : 'PayAmount_Apr',
 'POS_CLASS': 1,
 'BASELINE': True,
-'USECASE': None
+'ONEHOT': False
 },
 "CONFIG4" : { 
 'NAME' : 'miniloan', 
 'DATA_SET': '../data/miniloan-decisions-100K.csv',
 'DATA_TYPES': {},
-'DROP': ["Unnamed: 0"],
+'DROP': ["Unnamed: 0", "name"],
 'MODE': 'PREDICTIVE',
 'TRAIN_TEST_SPLIT': 0.3,
-'BINARIZER': 'QUANTILE',
-'ALGO': 'BRCG',
+'BINARIZER': 'NATIVE',
+'ALGO': 'RIPPER',
 'TARGET_LABEL': 'approval',
 'TYPE' : 'BINARY',
 'EXAMPLE_FEATURE' : 'income',
 'POS_CLASS': False,
 'BASELINE': True,
-'USECASE': None
+'ONEHOT': False
 }
 }
 
