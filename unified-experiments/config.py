@@ -1096,10 +1096,142 @@ config_dict_imbalanced= {"CONFIG-I1" : {
 'BASELINE': False,
 'UNDERSAMP': False,
 'ONEHOT': False
-}
+},
 
-}
 
+"CONFIG-I48" : { 
+'NAME' : 'fraud_oracle', 
+'DATA_SET': '../data/fraud_oracle_clean.csv',
+'DATA_TYPES': {'WeekOfMonth': float, 'WeekOfMonthClaimed': float,'Age': float,'PolicyNumber': float,'Age': float,'RepNumber': float,'Deductible': float,'DriverRating': float,'Year': float},
+'DROP': ["Unnamed: 0"],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'NATIVE',
+'ALGO': 'RIPPER',
+'TARGET_LABEL': 'FraudFound_P',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'Sex',
+'POS_CLASS': 1,
+'BASELINE': False,
+'UNDERSAMP': False,
+'ONEHOT': True
+
+},
+
+
+"CONFIG-I49" : { 
+'NAME' : 'fraud_oracle', 
+'DATA_SET': '../data/fraud_oracle_clean.csv',
+'DATA_TYPES': {},
+'DROP': ["Unnamed: 0"],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'TREES',
+'ALGO': 'RIPPER',
+'TARGET_LABEL': 'FraudFound_P',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'Sex',
+'POS_CLASS': 1,
+'BASELINE': False,
+'UNDERSAMP': False,
+'ONEHOT': False
+},
+
+
+"CONFIG-I50" : { 
+'NAME' : 'fraud_oracle', 
+'DATA_SET': '../data/fraud_oracle_clean.csv',
+'DATA_TYPES': {},
+'DROP': ["Unnamed: 0"],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'QUANTILE',
+'ALGO': 'RIPPER',
+'TARGET_LABEL': 'FraudFound_P',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'Sex',
+'POS_CLASS': 1,
+'BASELINE': False,
+'UNDERSAMP': False,
+'ONEHOT': False
+},
+
+
+"CONFIG-I51" : { 
+'NAME' : 'fraud_oracle', 
+'DATA_SET': '../data/fraud_oracle_clean.csv',
+'DATA_TYPES': {},
+'DROP': ["Unnamed: 0"],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'QUANTILE',
+'ALGO': 'BRCG',
+'TARGET_LABEL': 'FraudFound_P',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'Sex',
+'POS_CLASS': 1,
+'BASELINE': False,
+'UNDERSAMP': False,
+'ONEHOT': False
+},
+
+
+"CONFIG-I52" : { 
+'NAME' : 'fraud_oracle', 
+'DATA_SET': '../data/fraud_oracle_clean.csv',
+'DATA_TYPES': {},
+'DROP': ["Unnamed: 0"],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'TREES',
+'ALGO': 'BRCG',
+'TARGET_LABEL': 'FraudFound_P',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'Sex',
+'POS_CLASS': 1,
+'BASELINE': False,
+'UNDERSAMP': False,
+'ONEHOT': False
+},
+
+
+"CONFIG-I53" : { 
+'NAME' : 'fraud_oracle', 
+'DATA_SET': '../data/fraud_oracle_clean.csv',
+'DATA_TYPES': {},
+'DROP': ["Unnamed: 0"],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'TREES',
+'ALGO': 'CORELS',
+'TARGET_LABEL': 'FraudFound_P',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'Sex',
+'POS_CLASS': 1,
+'BASELINE': False,
+'UNDERSAMP': False,
+'ONEHOT': False
+},
+
+
+"CONFIG-I54" : { 
+'NAME' : 'fraud_oracle', 
+'DATA_SET': '../data/fraud_oracle_clean.csv',
+'DATA_TYPES': {},
+'DROP': ["Unnamed: 0"],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'QUANTILE',
+'ALGO': 'CORELS',
+'TARGET_LABEL': 'FraudFound_P',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'Sex',
+'POS_CLASS': 1,
+'BASELINE': False,
+'UNDERSAMP': False,
+'ONEHOT': False
+}
+}
 
 
 
