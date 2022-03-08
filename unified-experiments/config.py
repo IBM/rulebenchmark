@@ -1230,7 +1230,147 @@ config_dict_imbalanced= {"CONFIG-I1" : {
 'BASELINE': False,
 'UNDERSAMP': False,
 'ONEHOT': False
+},
+
+
+"CONFIG-I55" : { 
+'NAME' : 'miniloan', 
+'DATA_SET': '../data/miniloan-decisions-100K.csv',
+'DATA_TYPES': {'creditScore': float, 'income': float, 'loanAmount': float, 'monthDuration': float, 'yearlyReimbursement': float},
+'DROP': ["Unnamed: 0", "name"],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'NATIVE',
+'ALGO': 'RIPPER',
+'TARGET_LABEL': 'approval',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'income',
+'POS_CLASS': False,
+'BASELINE': False,
+'UNDERSAMP': True,
+'ONEHOT': False
 }
+,
+
+
+"CONFIG-I56" : { 
+'NAME' : 'miniloan', 
+'DATA_SET': '../data/miniloan-decisions-100K.csv',
+'DATA_TYPES': {},
+'DROP': ["Unnamed: 0", "name"],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'TREES',
+'ALGO': 'BRCG',
+'TARGET_LABEL': 'approval',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'income',
+'POS_CLASS': False,
+'BASELINE': False,
+'UNDERSAMP': True,
+'ONEHOT': True
+},
+
+
+"CONFIG-I57" : { 
+'NAME' : 'miniloan', 
+'DATA_SET': '../data/miniloan-decisions-100K.csv',
+'DATA_TYPES': {},
+'DROP': ["Unnamed: 0", "name"],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'QUANTILE',
+'ALGO': 'BRCG',
+'TARGET_LABEL': 'approval',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'income',
+'POS_CLASS': False,
+'BASELINE': False,
+'UNDERSAMP': True,
+'ONEHOT': True
+},
+
+
+"CONFIG-I58" : { 
+'NAME' : 'miniloan', 
+'DATA_SET': '../data/miniloan-decisions-100K.csv',
+'DATA_TYPES': {},
+'DROP': ["Unnamed: 0", "name"],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'TREES',
+'ALGO': 'CORELS',
+'TARGET_LABEL': 'approval',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'income',
+'POS_CLASS': False,
+'BASELINE': False,
+'UNDERSAMP': True,
+'ONEHOT': True
+}
+
+,
+
+
+"CONFIG-I59" : { 
+'NAME' : 'miniloan', 
+'DATA_SET': '../data/miniloan-decisions-100K.csv',
+'DATA_TYPES': {},
+'DROP': ["Unnamed: 0", "name"],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'QUANTILE',
+'ALGO': 'CORELS',
+'TARGET_LABEL': 'approval',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'income',
+'POS_CLASS': False,
+'BASELINE': False,
+'UNDERSAMP': True,
+'ONEHOT': True
+}
+,
+
+
+"CONFIG-I60" : { 
+'NAME' : 'miniloan', 
+'DATA_SET': '../data/miniloan-decisions-100K.csv',
+'DATA_TYPES': {},
+'DROP': ["Unnamed: 0", "name"],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'TREES',
+'ALGO': 'RIPPER',
+'TARGET_LABEL': 'approval',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'income',
+'POS_CLASS': False,
+'BASELINE': False,
+'UNDERSAMP': True,
+'ONEHOT': True
+}
+,
+
+
+"CONFIG-I61" : { 
+'NAME' : 'miniloan', 
+'DATA_SET': '../data/miniloan-decisions-100K.csv',
+'DATA_TYPES': {},
+'DROP': ["Unnamed: 0", "name"],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'QUANTILE',
+'ALGO': 'RIPPER',
+'TARGET_LABEL': 'approval',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'income',
+'POS_CLASS': False,
+'BASELINE': False,
+'UNDERSAMP': True,
+'ONEHOT': True
+}
+
+
 }
 
 
