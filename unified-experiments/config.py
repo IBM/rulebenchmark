@@ -216,13 +216,13 @@ config_dict= {"CONFIG1" : {
 'DROP': ['Rented Bike Count', 'Unnamed: 0'],
 'MODE': 'PREDICTIVE',
 'TRAIN_TEST_SPLIT': 0.3,
-'BINARIZER': 'QUANTILE',
-'ALGO': 'BRCG',
+'BINARIZER': 'NATIVE',
+'ALGO': 'RIPPER',
 'TARGET_LABEL': 'Target',
 'TYPE' : 'BINARY',
 'EXAMPLE_FEATURE' : 'Target',
 'POS_CLASS': 1,
-'BASELINE': True,
+'ONEHOT': False,
 'USECASE': None
 },"CONFIG15" : { 
 'NAME' : 'miniloan', 
@@ -962,7 +962,142 @@ config_dict_imbalanced= {"CONFIG-I1" : {
 'BASELINE': True,
 'UNDERSAMP': True,
 'ONEHOT': False
+},
+
+
+"CONFIG-I41" : { 
+'NAME' : 'bike_imbalanced', 
+'DATA_SET': '../data/binary_bike_imbalanced.csv',
+'DATA_TYPES': {'Rented Bike Count': float, 'Hour': float,'Humidity(%)': float,'Visibility (10m)': float},
+'DROP': ["Rented Bike Count", "Unnamed: 0"],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'NATIVE',
+'ALGO': 'RIPPER',
+'TARGET_LABEL': 'Target',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'Hour',
+'POS_CLASS': 1,
+'BASELINE': True,
+'UNDERSAMP': False,
+'ONEHOT': True
+},
+
+
+"CONFIG-I42" : { 
+'NAME' : 'bike_imbalanced', 
+'DATA_SET': '../data/binary_bike_imbalanced.csv',
+'DATA_TYPES': {},
+'DROP': ["Rented Bike Count", "Unnamed: 0"],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'TREES',
+'ALGO': 'BRCG',
+'TARGET_LABEL': 'Target',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'Hour',
+'POS_CLASS': 1,
+'BASELINE': False,
+'UNDERSAMP': False,
+'ONEHOT': False
+},
+
+
+"CONFIG-I43" : { 
+'NAME' : 'bike_imbalanced', 
+'DATA_SET': '../data/binary_bike_imbalanced.csv',
+'DATA_TYPES': {},
+'DROP': ["Rented Bike Count", "Unnamed: 0"],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'QUANTILE',
+'ALGO': 'BRCG',
+'TARGET_LABEL': 'Target',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'Hour',
+'POS_CLASS': 1,
+'BASELINE': False,
+'UNDERSAMP': False,
+'ONEHOT': False
+},
+
+
+"CONFIG-I44" : { 
+'NAME' : 'bike_imbalanced', 
+'DATA_SET': '../data/binary_bike_imbalanced.csv',
+'DATA_TYPES': {},
+'DROP': ["Rented Bike Count", "Unnamed: 0"],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'QUANTILE',
+'ALGO': 'RIPPER',
+'TARGET_LABEL': 'Target',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'Hour',
+'POS_CLASS': 1,
+'BASELINE': False,
+'UNDERSAMP': False,
+'ONEHOT': False
 }
+,
+
+
+"CONFIG-I45" : { 
+'NAME' : 'bike_imbalanced', 
+'DATA_SET': '../data/binary_bike_imbalanced.csv',
+'DATA_TYPES': {},
+'DROP': ["Rented Bike Count", "Unnamed: 0"],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'TREES',
+'ALGO': 'RIPPER',
+'TARGET_LABEL': 'Target',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'Hour',
+'POS_CLASS': 1,
+'BASELINE': False,
+'UNDERSAMP': False,
+'ONEHOT': False
+},
+
+
+"CONFIG-I46" : { 
+'NAME' : 'bike_imbalanced', 
+'DATA_SET': '../data/binary_bike_imbalanced.csv',
+'DATA_TYPES': {},
+'DROP': ["Rented Bike Count", "Unnamed: 0"],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'TREES',
+'ALGO': 'CORELS',
+'TARGET_LABEL': 'Target',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'Hour',
+'POS_CLASS': 1,
+'BASELINE': False,
+'UNDERSAMP': False,
+'ONEHOT': False
+},
+
+
+"CONFIG-I47" : { 
+'NAME' : 'bike_imbalanced', 
+'DATA_SET': '../data/binary_bike_imbalanced.csv',
+'DATA_TYPES': {},
+'DROP': ["Rented Bike Count", "Unnamed: 0"],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'QUANTILE',
+'ALGO': 'CORELS',
+'TARGET_LABEL': 'Target',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'Hour',
+'POS_CLASS': 1,
+'BASELINE': False,
+'UNDERSAMP': False,
+'ONEHOT': False
+}
+
 }
 
 
