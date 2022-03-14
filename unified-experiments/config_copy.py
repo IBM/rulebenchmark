@@ -1,5 +1,5 @@
 
-
+# add datasets here
 
 
 config_dict_imbalanced= {"CONFIG-I1" : { 
@@ -94,7 +94,7 @@ config_dict_imbalanced= {"CONFIG-I1" : {
 'NAME' : 'bike_imbalanced', 
 'DATA_SET': '../data/binary_bike_imbalanced.csv',
 'DATA_TYPES': {'Rented Bike Count': float, 'Hour': float,'Humidity(%)': float,'Visibility (10m)': float},
-'DROP': ["Rented Bike Count", "Unnamed: 0"],
+'DROP': ["Unnamed: 0","Rented Bike Count"],
 'MODE': 'PREDICTIVE',
 'TRAIN_TEST_SPLIT': 0.3,
 'BINARIZER': ['TREES',"QUANTILE","NATIVE"],
