@@ -241,12 +241,24 @@ config_dict= {"CONFIG1" : {
 'POS_CLASS': False,
 'BASELINE': True,
 'USECASE': None
+},
+
+"CONFIG16" : { 
+'NAME' : 'binary-churn-r2n', 
+'DATA_SET': '../data/churn_prob_out_35.csv',
+'DATA_TYPES': {'Children': float, 'RatePlan': str},
+'DROP': ['Id', 'pChurn', '3_Class', '5_Class', 'is_test_set'],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3, # 'FIXED' for using 'is_test_set'
+'BINARIZER': 'NATIVE',
+'ALGO': 'R2N',
+'TARGET_LABEL': 'CHURN',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'Est Income',
+'POS_CLASS': 'T'
 }
+
 }
-
-
-    
-
 
 # Imbalanced Configs
 
