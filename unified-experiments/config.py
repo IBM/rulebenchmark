@@ -1409,7 +1409,7 @@ config_dict_imbalanced= {"CONFIG-I1" : {
 'DROP': ['Index'],
 'MODE': 'PREDICTIVE',
 'TRAIN_TEST_SPLIT': 0.3,
-'BINARIZER': 'NATIVE',
+'BINARIZER': 'QUANTILE',
 'ALGO': 'R2N',
 'TARGET_LABEL': 'Target',
 'TYPE' : 'BINARY',
@@ -1433,7 +1433,7 @@ config_dict_imbalanced= {"CONFIG-I1" : {
 "CONFIG-I65" : { 
 'NAME' : 'binary_bike', 
 'DATA_SET': '../data/binary_bike.csv',
-'DATA_TYPES': {'Hour': float,'Humidity(%)': float,'Visibility (10m)': float},
+'DATA_TYPES': {},
 'DROP': ['Rented Bike Count', 'Unnamed: 0'],
 'MODE': 'PREDICTIVE',
 'TRAIN_TEST_SPLIT': 0.3,
