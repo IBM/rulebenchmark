@@ -1389,6 +1389,49 @@ config_dict_imbalanced= {"CONFIG-I1" : {
 'EXAMPLE_FEATURE' : 'V6',
 'POS_CLASS': 1
 
+},
+"CONFIG-I63" : { 
+'NAME' : 'german-credit-brcg', 
+'DATA_SET': '../data/german_credit_codiert.csv',
+'DATA_TYPES': {},
+'DROP': ['Index'],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'NATIVE',
+'ALGO': 'R2N',
+'TARGET_LABEL': 'Target',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'Credit Amount',
+'POS_CLASS': 0
+},
+"CONFIG-I64" : { 
+'NAME' : 'fraud_detection', 
+'DATA_SET': '../data/fraud_detection.csv',
+'DATA_TYPES': {},
+'DROP': [],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'NATIVE',
+'ALGO': 'R2N',
+'TARGET_LABEL': 'Class',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'V6',
+'POS_CLASS': 1
+},
+"CONFIG-I65" : { 
+'NAME' : 'binary_bike', 
+'DATA_SET': '../data/binary_bike.csv',
+'DATA_TYPES': {'Hour': float,'Humidity(%)': float,'Visibility (10m)': float},
+'DROP': ['Rented Bike Count', 'Unnamed: 0'],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'NATIVE',
+'ALGO': 'R2N',
+'TARGET_LABEL': 'Target',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'Target',
+'POS_CLASS': 1
+
 }
 
 
