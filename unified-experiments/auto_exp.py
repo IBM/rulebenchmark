@@ -1,69 +1,86 @@
-from config_copy_copy import config_dict_imbalanced
-from config_copy_copy import Config_list
+from config_copy_copy import CONFIG_DICT_IMBALANCED, CONFIG_LIST
 import pandas as pd
 import numpy as np
-import seaborn as sns
-# import os
+
 from sklearn.model_selection import train_test_split 
 from sklearn.metrics import matthews_corrcoef,fbeta_score,confusion_matrix,f1_score,precision_score, recall_score, accuracy_score, balanced_accuracy_score, confusion_matrix, r2_score, explained_variance_score, mean_absolute_error, max_error
-
 from sklearn.ensemble import GradientBoostingRegressor
-#import wittgenstein as lw
+
 import time
 import warnings
-import re
 
-from aix360.algorithms.rbm import BRCGExplainer, BooleanRuleCG
-
-from aix360.algorithms.rbm import FeatureBinarizer
-
-from aix360.algorithms.rbm import FeatureBinarizerFromTrees
-
+from aix360.algorithms.rbm import BooleanRuleCG, FeatureBinarizer, FeatureBinarizerFromTrees # BRCGExplainer, 
 from aix360i.algorithms.rule_induction.ripper import Ripper
-
 from corels import *
+#import wittgenstein as lw
 
-BINARIZER= ['TREES',"QUANTILE","NATIVE"]
+
+# For some rule induction algorithms the pos class is always value 1
+def convert(char):
+    if char == CONFIG['POS_CLASS']:
+        return 1
+    else:
+        return 0
+
+BINARIZER = ['TREES',"QUANTILE","NATIVE"]
 ALGO = ['RIPPER',"BRCG","CORELS"]
+
+PIPELINES = [('TREES','RIPPER'), ('QUANTILE','RIPPER'), ('NATIVE','RIPPER'), 
+('TREES','BRCG'), ('QUANTILE','BRCG'), ('TREES','CORELS'), ('QUANTILE','CORELS')]
+
+TRAIN_TEST_SPLIT =  0.3
 
 
 metric_dict = {}
-metric_list = []  
+metric_list = []
+
+result_list = []
 
 script_time = time.time()
-for config in config_dict_imbalanced:
-    CONFIG = config_dict_imbalanced[config]
+print('Starting job at', script_time)
+
+
+for config in CONFIG_DICT_IMBALANCED:
+    result = {}
+    CONFIG = CONFIG_DICT_IMBALANCED[config]
+    print('Running data set:', CONFIG['NAME'])
+    result['Dataset'] = CONFIG['NAME']
     Pos_class = CONFIG['POS_CLASS'] 
-    def convert(char):
-        if char == CONFIG['POS_CLASS']:
-            return 1
-        else:
-            return 0
 
     df = pd.read_csv(CONFIG['DATA_SET'],dtype=CONFIG['DATA_TYPES'])
+    print('Read', len(df), 'rows from', CONFIG['DATA_SET'])
+    result['NO_Rows'] = len(df)
+
     df = df.drop(columns=CONFIG['DROP'])
     
-    
-    print(CONFIG['NAME'])
-    df[CONFIG['TARGET_LABEL']].value_counts()
+    print(df[CONFIG['TARGET_LABEL']].value_counts())
 
-  
-   
-    x_train, x_test, y_train, y_test = train_test_split(df.drop(columns=[CONFIG['TARGET_LABEL']]), df[CONFIG['TARGET_LABEL']], test_size=CONFIG['TRAIN_TEST_SPLIT'], random_state=42)
+    x_train, x_test, y_train, y_test = train_test_split(
+        df.drop(columns=[CONFIG['TARGET_LABEL']]), 
+        df[CONFIG['TARGET_LABEL']], 
+        test_size=TRAIN_TEST_SPLIT, 
+        random_state=42)
 
     print('Training:', x_train.shape, y_train.shape)
     print('Test:', x_test.shape, y_test.shape)
 
+    for (bina, algo) in PIPELINES:
+        prefix = bina + '-'  + algo
+        # run binarizer
+        # run algo
+        # compute metrics
+        result[prefix+'metric_name_1'] = 9.5
+        result[prefix+'metric_name_2'] = 4.5
+
+
     for i in BINARIZER:
-        
-        
         if i == "TREES":
             binarizer =  FeatureBinarizerFromTrees(negations=True, randomState=42) 
             binarizer = binarizer.fit(x_train, y_train)
             x_train_bin = binarizer.transform(x_train) 
             x_test_bin = binarizer.transform(x_test)
             for algo in ALGO:
-                präds = []
+                preds = []
                 if algo == 'RIPPER':
                     CONFIG['POS_CLASS'] = Pos_class
                     # start time
@@ -85,13 +102,13 @@ for config in config_dict_imbalanced:
                         if ripper_t_rl != 0:
                         
                             for i in range(len(estimator.rule_map[CONFIG['POS_CLASS']])):
-                                präds.append(len(estimator.rule_map[CONFIG['POS_CLASS']][i]))
-                            ripper_t_präd = sum(präds)
-                            ripper_t_max_präd = max(präds)
+                                preds.append(len(estimator.rule_map[CONFIG['POS_CLASS']][i]))
+                            ripper_t_pred = sum(preds)
+                            ripper_t_max_pred = max(preds)
                         
                         else:
-                            ripper_t_präd = 0
-                            ripper_t_max_präd= 0
+                            ripper_t_pred = 0
+                            ripper_t_max_pred= 0
                         print(CONFIG['POS_CLASS'])
                         print('------------------------------------------------------')
                     except Exception:
@@ -146,7 +163,7 @@ for config in config_dict_imbalanced:
             x_test_bin = binarizer.transform(x_test)  
 
             for algo in ALGO:
-                präds = []
+                preds = []
 
                 if algo == 'RIPPER':
                     CONFIG['POS_CLASS'] = Pos_class
@@ -165,13 +182,13 @@ for config in config_dict_imbalanced:
                         if ripper_q_rl != 0:
                             
                             for i in range(len(estimator.rule_map[CONFIG['POS_CLASS']])):
-                                präds.append(len(estimator.rule_map[CONFIG['POS_CLASS']][i]))
-                            ripper_q_präd = sum(präds)
-                            ripper_q_max_präd = max(präds)
+                                preds.append(len(estimator.rule_map[CONFIG['POS_CLASS']][i]))
+                            ripper_q_pred = sum(preds)
+                            ripper_q_max_pred = max(preds)
 
                         else:
-                            ripper_q_präd = 0
-                            ripper_q_max_präd= 0
+                            ripper_q_pred = 0
+                            ripper_q_max_pred= 0
                         
                         
                         print('------------------------------------------------------')
@@ -245,40 +262,41 @@ for config in config_dict_imbalanced:
             if ripper_n_rl != 0:
             
                 for i in range(len(estimator.rule_map[CONFIG['POS_CLASS']])):
-                    präds.append(len(estimator.rule_map[CONFIG['POS_CLASS']][i]))
-                ripper_n_präd = sum(präds)
-                ripper_n_max_präd = max(präds)
+                    preds.append(len(estimator.rule_map[CONFIG['POS_CLASS']][i]))
+                ripper_n_pred = sum(preds)
+                ripper_n_max_pred = max(preds)
 
             else:
-                ripper_n_präd = 0
-                ripper_n_max_präd= 0
+                ripper_n_pred = 0
+                ripper_n_max_pred= 0
         
-
-              
-
+    result_list.append(result)
     
-    metric_dict.update({config:{"Config":config,"ripper_t_bacc":ripper_t_bacc, "ripper_t_f2": ripper_t_f2,"ripper_t_acc":ripper_t_acc,"ripper_t_rl":ripper_t_rl,"ripper_t_präd":ripper_t_präd,"ripper_t_max_präd":ripper_t_max_präd, 
+    metric_dict.update({config:{"Config":config,"ripper_t_bacc":ripper_t_bacc, "ripper_t_f2": ripper_t_f2,"ripper_t_acc":ripper_t_acc,"ripper_t_rl":ripper_t_rl,"ripper_t_pred":ripper_t_pred,"ripper_t_max_pred":ripper_t_max_pred, 
                                                 "brcg_t_bacc": brcg_t_bacc, "brcg_t_f2": brcg_t_f2,"brcg_t_acc":brcg_t_acc,"brcg_t_rl":brcg_t_rl,
                                                 "corels_t_bacc":corels_t_bacc, "corels_t_f2": corels_t_f2,"corels_t_acc":corels_t_acc,"corels_t_rl":corels_t_rl,
-                                                "ripper_q_bacc":ripper_q_bacc, "ripper_q_f2":ripper_q_f2,"ripper_q_acc":ripper_q_acc,"ripper_q_rl":ripper_q_rl,"ripper_q_präd":ripper_q_präd,"ripper_q_max_präd":ripper_q_max_präd, 
+                                                "ripper_q_bacc":ripper_q_bacc, "ripper_q_f2":ripper_q_f2,"ripper_q_acc":ripper_q_acc,"ripper_q_rl":ripper_q_rl,"ripper_q_pred":ripper_q_pred,"ripper_q_max_pred":ripper_q_max_pred, 
                                                 "brcg_q_bacc":brcg_q_bacc,"brcg_q_f2":brcg_q_f2,"brcg_q_acc":brcg_q_acc,"brcg_q_rl":brcg_q_rl,
                                                 "corels_q_bacc":corels_q_bacc,"corels_q_f2":corels_q_f2,"corels_q_acc": corels_q_bacc,"corels_q_rl":corels_q_rl,
-                                                "ripper_n_bacc": ripper_n_bacc, "ripper_n_f2": ripper_n_f2,"ripper_n_acc": ripper_n_bacc, "ripper_n_rl":ripper_n_rl,"ripper_n_präd":ripper_n_präd,"ripper_n_max_präd":ripper_n_max_präd}})
+                                                "ripper_n_bacc": ripper_n_bacc, "ripper_n_f2": ripper_n_f2,"ripper_n_acc": ripper_n_bacc, "ripper_n_rl":ripper_n_rl,"ripper_n_pred":ripper_n_pred,"ripper_n_max_pred":ripper_n_max_pred}})
     metric_list.append(metric_dict[config])
    
 script_time_end = time.time()
 print('Training time: ' + str(script_time_end - script_time))
 
+result_df = pd.DataFrame(result_list)
+result_df.to_csv('results.csv', sep=',')
+
 df_list = []
 csv_list = []
-for i in range(len(Config_list)):
+for i in range(len(CONFIG_LIST)):
     
-    if Config_list[i][1]['TYPE'] == "BINARY":
-        if Config_list[i][1]["DATA_SET"] not in csv_list:
-            temp_df = pd.read_csv(Config_list[i][1]["DATA_SET"])
-            csv_list.append(Config_list[i][1]["DATA_SET"])
-            #temp_df = temp_df.drop(columns=Config_list[i][1]['DROP'])
-            temp_df= temp_df.rename(columns={temp_df[Config_list[i][1]['TARGET_LABEL']].name : 'TARGET_LABEL'})
+    if CONFIG_LIST[i][1]['TYPE'] == "BINARY":
+        if CONFIG_LIST[i][1]["DATA_SET"] not in csv_list:
+            temp_df = pd.read_csv(CONFIG_LIST[i][1]["DATA_SET"])
+            csv_list.append(CONFIG_LIST[i][1]["DATA_SET"])
+            #temp_df = temp_df.drop(columns=CONFIG_LIST[i][1]['DROP'])
+            temp_df= temp_df.rename(columns={temp_df[CONFIG_LIST[i][1]['TARGET_LABEL']].name : 'TARGET_LABEL'})
             df_list.append(temp_df)
         
 eval_df = pd.DataFrame(csv_list, columns=['Data_Set'])
@@ -295,8 +313,8 @@ eval_df["ripper_t_bacc"] = pd.Series()
 eval_df["ripper_t_f2"] = pd.Series()
 eval_df["ripper_t_acc"] = pd.Series()
 eval_df["ripper_t_rl"] = pd.Series()
-eval_df["ripper_t_präd"] = pd.Series()
-eval_df["ripper_t_max_präd"] = pd.Series()
+eval_df["ripper_t_pred"] = pd.Series()
+eval_df["ripper_t_max_pred"] = pd.Series()
 
 eval_df["brcg_t_bacc"] = pd.Series()
 eval_df["brcg_t_f2"] = pd.Series()
@@ -313,8 +331,8 @@ eval_df["ripper_q_bacc"] = pd.Series()
 eval_df["ripper_q_f2"] = pd.Series()
 eval_df["ripper_q_acc"] = pd.Series()
 eval_df["ripper_q_rl"] = pd.Series()
-eval_df["ripper_q_präd"] = pd.Series()
-eval_df["ripper_q_max_präd"] = pd.Series()
+eval_df["ripper_q_pred"] = pd.Series()
+eval_df["ripper_q_max_pred"] = pd.Series()
 
 eval_df["brcg_q_bacc"] = pd.Series()
 eval_df["brcg_q_f2"] = pd.Series()
@@ -331,8 +349,8 @@ eval_df["ripper_n_bacc"] = pd.Series()
 eval_df["ripper_n_f2"] = pd.Series()
 eval_df["ripper_n_acc"] = pd.Series()
 eval_df["ripper_n_rl"] = pd.Series()
-eval_df["ripper_n_präd"] = pd.Series()
-eval_df["ripper_n_max_präd"] = pd.Series()
+eval_df["ripper_n_pred"] = pd.Series()
+eval_df["ripper_n_max_pred"] = pd.Series()
         
             
 
@@ -365,8 +383,8 @@ for frame in range(len(df_list)):
     eval_df["ripper_t_f2"].iloc[frame] = metric_list[frame]["ripper_t_f2"]
     eval_df["ripper_t_acc"].iloc[frame] = metric_list[frame]["ripper_t_acc"]
     eval_df["ripper_t_rl"].iloc[frame] = metric_list[frame]["ripper_t_rl"]
-    eval_df["ripper_t_präd"].iloc[frame] = metric_list[frame]["ripper_t_präd"]
-    eval_df["ripper_t_max_präd"].iloc[frame] = metric_list[frame]["ripper_t_max_präd"]
+    eval_df["ripper_t_pred"].iloc[frame] = metric_list[frame]["ripper_t_pred"]
+    eval_df["ripper_t_max_pred"].iloc[frame] = metric_list[frame]["ripper_t_max_pred"]
     
 
 
@@ -385,8 +403,8 @@ for frame in range(len(df_list)):
     eval_df["ripper_q_f2"].iloc[frame] = metric_list[frame]["ripper_q_f2"]
     eval_df["ripper_q_acc"].iloc[frame] = metric_list[frame]["ripper_q_acc"]
     eval_df["ripper_q_rl"].iloc[frame] = metric_list[frame]["ripper_q_rl"]
-    eval_df["ripper_q_präd"].iloc[frame] = metric_list[frame]["ripper_q_präd"]
-    eval_df["ripper_q_max_präd"].iloc[frame] = metric_list[frame]["ripper_q_max_präd"]
+    eval_df["ripper_q_pred"].iloc[frame] = metric_list[frame]["ripper_q_pred"]
+    eval_df["ripper_q_max_pred"].iloc[frame] = metric_list[frame]["ripper_q_max_pred"]
 
     eval_df["brcg_q_bacc"].iloc[frame] = metric_list[frame]["brcg_q_bacc"]
     eval_df["brcg_q_f2"].iloc[frame] = metric_list[frame]["brcg_q_f2"]
@@ -404,8 +422,8 @@ for frame in range(len(df_list)):
     eval_df["ripper_n_f2"].iloc[frame] = metric_list[frame]["ripper_n_f2"]
     eval_df["ripper_n_acc"].iloc[frame] = metric_list[frame]["ripper_n_acc"]
     eval_df["ripper_n_rl"].iloc[frame] = metric_list[frame]["ripper_n_rl"]
-    eval_df["ripper_n_präd"].iloc[frame] = metric_list[frame]["ripper_n_präd"]
-    eval_df["ripper_n_max_präd"].iloc[frame] = metric_list[frame]["ripper_n_max_präd"]
+    eval_df["ripper_n_pred"].iloc[frame] = metric_list[frame]["ripper_n_pred"]
+    eval_df["ripper_n_max_pred"].iloc[frame] = metric_list[frame]["ripper_n_max_pred"]
 
 
-eval_df.to_csv("test5.csv",sep =",")
+eval_df.to_csv("test6.csv",sep =",")
