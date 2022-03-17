@@ -66,156 +66,96 @@ for config in CONFIG_DICT_IMBALANCED:
 
     for (bina, algo) in PIPELINES:
         prefix = bina + '-'  + algo
-        # run binarizer
-        # run algo
-        # compute metrics
-        result[prefix+'metric_name_1'] = 9.5
-        result[prefix+'metric_name_2'] = 4.5
-
-
-    for i in BINARIZER:
-        if i == "TREES":
+        if bina == "TREES":
             binarizer =  FeatureBinarizerFromTrees(negations=True, randomState=42) 
             binarizer = binarizer.fit(x_train, y_train)
             x_train_bin = binarizer.transform(x_train) 
             x_test_bin = binarizer.transform(x_test)
-            for algo in ALGO:
-                preds = []
-                if algo == 'RIPPER':
-                    CONFIG['POS_CLASS'] = Pos_class
-                    # start time
-                    start_time = time.time()
-                    try:
-                        estimator = Ripper()
-                        estimator.fit(x_train_bin, y_train, pos_value=CONFIG['POS_CLASS'])
-                        end_time = time.time()
-                        y_pred = estimator.predict(x_test_bin)
-                        print('------------------------------------------------------') 
-                        print('RIPPER TREES')
-
-                        ripper_t_bacc = balanced_accuracy_score(y_test, y_pred, adjusted=True)
-                        ripper_t_f2 = fbeta_score(y_test, y_pred, pos_label=CONFIG['POS_CLASS'], beta= 2)
-                        ripper_t_acc = accuracy_score(y_test, y_pred)
-
-                        print('Rule count: ' + str(sum([len(rules) for rules in estimator.rule_map.values()])))
-                        ripper_t_rl = str(sum([len(rules) for rules in estimator.rule_map.values()]))
-                        if ripper_t_rl != 0:
-                        
-                            for i in range(len(estimator.rule_map[CONFIG['POS_CLASS']])):
-                                preds.append(len(estimator.rule_map[CONFIG['POS_CLASS']][i]))
-                            ripper_t_pred = sum(preds)
-                            ripper_t_max_pred = max(preds)
-                        
-                        else:
-                            ripper_t_pred = 0
-                            ripper_t_max_pred= 0
-                        print(CONFIG['POS_CLASS'])
-                        print('------------------------------------------------------')
-                    except Exception:
-                        pass
-                if algo == 'BRCG':
-                    
-                    CONFIG['POS_CLASS'] = 1
-                    start_time = time.time()
-                    estimator = BooleanRuleCG()
-                    with warnings.catch_warnings():
-                        warnings.simplefilter("ignore")
-                        
-                        estimator.fit(x_train_bin, y_train)
-                        end_time = time.time()
-                        y_pred = estimator.predict(x_test_bin)
-                    print('------------------------------------------------------') 
-                    brcg_t_bacc = balanced_accuracy_score(y_test, y_pred, adjusted=True)
-                    brcg_t_f2 = fbeta_score(y_test, y_pred, pos_label=CONFIG['POS_CLASS'], beta= 2)
-                    brcg_t_acc = accuracy_score(y_test, y_pred)
+        
+        
+            if algo == 'RIPPER':
+                x_train_bin = pd.DataFrame(x_train_bin.to_records())
+                x_test_bin = pd.DataFrame(x_test_bin.to_records())
+                x_train_bin = x_train_bin.drop("index", axis = 1)
+                x_test_bin = x_test_bin.drop("index", axis = 1)
+                x_train_bin.columns = pd.Index(np.arange(1,len(x_train_bin.columns)+1).astype(str))
+                x_test_bin.columns = pd.Index(np.arange(1,len(x_test_bin.columns)+1).astype(str))
+                CONFIG['POS_CLASS'] = Pos_class
+                # start time
+                start_time = time.time()
                 
-                    model = estimator.explain()
-                    
-                    brcg_t_rl = len(model['rules']) 
-                    CONFIG['POS_CLASS']
-                    print('------------------------------------------------------')
+                estimator = Ripper()
+                estimator.fit(x_train_bin, y_train, pos_value=CONFIG['POS_CLASS'])
+                end_time = time.time()
+                y_pred = estimator.predict(x_test_bin)
 
-                if algo == 'CORELS':
-                    CONFIG['POS_CLASS'] = Pos_class
-                    start_time = time.time()
-                    estimator = CorelsClassifier(n_iter=10000, 
-                        max_card=2, 
-                        c = 0.0001 
-                        )
-                    estimator.fit(x_train_bin, y_train , prediction_name = CONFIG["TARGET_LABEL"])
+                
+                print('------------------------------------------------------') 
+                print('RIPPER TREES')
+                    
+            if algo == 'BRCG':
+                    
+                CONFIG['POS_CLASS'] = 1
+                start_time = time.time()
+                estimator = BooleanRuleCG()
+                with warnings.catch_warnings():
+                    warnings.simplefilter("ignore")
+                    
+                    estimator.fit(x_train_bin, y_train)
                     end_time = time.time()
                     y_pred = estimator.predict(x_test_bin)
-                    print('------------------------------------------------------') 
-                    print('CORELS TREES')
 
-                    corels_t_bacc = balanced_accuracy_score(y_test, y_pred, adjusted=True)
-                    corels_t_f2 = fbeta_score(y_test, y_pred, pos_label=CONFIG['POS_CLASS'], beta= 2)
-                    corels_t_acc = accuracy_score(y_test, y_pred)
-                    r_length = len(estimator.rl().rules)
-                    corels_t_rl = len(estimator.rl().rules)
-                    print("Rule Length:", r_length)
-                    print('------------------------------------------------------')
-
-        if i == "QUANTILE":
+            if algo == 'CORELS':
+                CONFIG['POS_CLASS'] = Pos_class
+                start_time = time.time()
+                estimator = CorelsClassifier(n_iter=10000, 
+                    max_card=2, 
+                    c = 0.0001 
+                    )
+                estimator.fit(x_train_bin, y_train , prediction_name = CONFIG["TARGET_LABEL"])
+                end_time = time.time()
+                y_pred = estimator.predict(x_test_bin)
+    
+            
+        if bina == "QUANTILE":
             binarizer =  FeatureBinarizer(numThresh=9,negations=True, randomState=42) 
             binarizer = binarizer.fit(x_train)
             x_train_bin = binarizer.transform(x_train) 
-            x_test_bin = binarizer.transform(x_test)  
+            x_test_bin = binarizer.transform(x_test)
+            
 
-            for algo in ALGO:
-                preds = []
+            if algo == 'RIPPER':
 
-                if algo == 'RIPPER':
-                    CONFIG['POS_CLASS'] = Pos_class
-                    start_time = time.time()
-                    try:
-                        estimator = Ripper()
-                        estimator.fit(x_train_bin, y_train, pos_value=CONFIG['POS_CLASS'])
-                        end_time = time.time()
-                        y_pred = estimator.predict(x_test_bin)
-                        print('------------------------------------------------------') 
-                        print('RIPPER QUANTILE')
-                        ripper_q_bacc = balanced_accuracy_score(y_test, y_pred, adjusted=True)
-                        ripper_q_f2 = fbeta_score(y_test, y_pred, pos_label=CONFIG['POS_CLASS'], beta= 2)
-                        ripper_q_acc = accuracy_score(y_test, y_pred)
-                        ripper_q_rl = str(sum([len(rules) for rules in estimator.rule_map.values()]))
-                        if ripper_q_rl != 0:
-                            
-                            for i in range(len(estimator.rule_map[CONFIG['POS_CLASS']])):
-                                preds.append(len(estimator.rule_map[CONFIG['POS_CLASS']][i]))
-                            ripper_q_pred = sum(preds)
-                            ripper_q_max_pred = max(preds)
-
-                        else:
-                            ripper_q_pred = 0
-                            ripper_q_max_pred= 0
-                        
-                        
-                        print('------------------------------------------------------')
-                    except Exception:
-                        pass
-                if algo == 'BRCG':
-                    CONFIG['POS_CLASS'] = 1
-                    start_time = time.time()
-                    estimator = BooleanRuleCG()
-                    with warnings.catch_warnings():
-                        warnings.simplefilter("ignore")
-                        estimator.fit(x_train_bin, y_train)
-                        end_time = time.time()
-                    y_pred = estimator.predict(x_test_bin)
-                    print('------------------------------------------------------')  
-                    print('BRCG QUANTILE')
-                    
-                    brcg_q_bacc = balanced_accuracy_score(y_test, y_pred, adjusted=True)
-                    brcg_q_f2 = fbeta_score(y_test, y_pred, pos_label=CONFIG['POS_CLASS'], beta= 2)
-                    brcg_q_acc = accuracy_score(y_test, y_pred)
-                    
-                    model = estimator.explain()
+                x_train_bin = pd.DataFrame(x_train_bin.to_records())
+                x_test_bin = pd.DataFrame(x_test_bin.to_records())
+                x_train_bin = x_train_bin.drop("index", axis = 1)
+                x_test_bin = x_test_bin.drop("index", axis = 1)
+                x_train_bin.columns = pd.Index(np.arange(1,len(x_train_bin.columns)+1).astype(str))
+                x_test_bin.columns = pd.Index(np.arange(1,len(x_test_bin.columns)+1).astype(str))
+                CONFIG['POS_CLASS'] = Pos_class
+                # start time
+                start_time = time.time()
                 
-        
-                    brcg_q_rl = len(model['rules'])
-                    print(CONFIG['POS_CLASS'])
-                    print('------------------------------------------------------')
+                estimator = Ripper()
+                estimator.fit(x_train_bin, y_train, pos_value=CONFIG['POS_CLASS'])
+                end_time = time.time()
+                y_pred = estimator.predict(x_test_bin)
+
+                
+                print('------------------------------------------------------') 
+                print('RIPPER QUANTILE')
+                    
+            if algo == 'BRCG':
+                    
+                CONFIG['POS_CLASS'] = 1
+                start_time = time.time()
+                estimator = BooleanRuleCG()
+                with warnings.catch_warnings():
+                    warnings.simplefilter("ignore")
+                    
+                    estimator.fit(x_train_bin, y_train)
+                    end_time = time.time()
+                    y_pred = estimator.predict(x_test_bin)
 
                 if algo == 'CORELS':
                     CONFIG['POS_CLASS'] = Pos_class
@@ -227,203 +167,72 @@ for config in CONFIG_DICT_IMBALANCED:
                     estimator.fit(x_train_bin, y_train , prediction_name = CONFIG["TARGET_LABEL"])
                     end_time = time.time()
                     y_pred = estimator.predict(x_test_bin)
-                    print('------------------------------------------------------') 
-            
-                    corels_q_bacc = balanced_accuracy_score(y_test, y_pred, adjusted=True)
-                    corels_q_f2 = fbeta_score(y_test, y_pred, pos_label=CONFIG['POS_CLASS'], beta= 2)
-                    corels_q_acc = accuracy_score(y_test, y_pred)
+
+            if bina == "NATIVE":
+                binarizer =  FeatureBinarizer(numThresh=9,negations=True, randomState=42) 
+                binarizer = binarizer.fit(x_train)
+                x_train_bin = x_train
+                x_test_bin = x_test
+
+        if algo == 'RIPPER':
+            try:
                 
-                    r_length = len(estimator.rl().rules)
-                    corels_q_rl = len(estimator.rl().rules)
-            
-                    print('------------------------------------------------------')   
+                rule_set_list = []
+                rule_set = estimator.export_rules_to_trxf_dnf_ruleset(CONFIG['POS_CLASS'])
+                conjunctions = rule_set.conjunctions
+                praed_len = []
+                for c in conjunctions:
+                    conjunction_dict = {}
+                    predicates = c.predicates
+                    praed_len.append(len(predicates))
+                    for p in predicates:
+                        name = str(p.feature) + str(p.relation)
+                        value = p.value
+                        conjunction_dict[name] = value
                 
-
-        if i == "NATIVE":
-            CONFIG['POS_CLASS'] = Pos_class
-            x_train_bin = x_train
-            x_test_bin = x_test
-
-            start_time = time.time()
+                rule_set_list.append(conjunction_dict)
+                ruleset_length = str(sum([len(rules) for rules in estimator.rule_map.values()]))
+                praed_sum = sum(praed_len)
+                max_rule_praed = max(praed_len)
+            except Exception:
+                ruleset_length = 0
+                max_rule_praed = 0
+                praed_sum = 0
         
-            estimator = Ripper()
-            estimator.fit(x_train_bin, y_train, pos_value=CONFIG['POS_CLASS'])
-            end_time = time.time()
-            y_pred = estimator.predict(x_test_bin)
-            print('------------------------------------------------------') 
-            print('RIPPER NATIVE')
-           
-            ripper_n_bacc = balanced_accuracy_score(y_test, y_pred, adjusted=True)
-            ripper_n_f2 = fbeta_score(y_test, y_pred, pos_label=CONFIG['POS_CLASS'], beta= 2)
-            ripper_n_acc = accuracy_score(y_test, y_pred)
-            
-            print(CONFIG['POS_CLASS'])
-            ripper_n_rl = str(sum([len(rules) for rules in estimator.rule_map.values()]))
-            if ripper_n_rl != 0:
-            
-                for i in range(len(estimator.rule_map[CONFIG['POS_CLASS']])):
-                    preds.append(len(estimator.rule_map[CONFIG['POS_CLASS']][i]))
-                ripper_n_pred = sum(preds)
-                ripper_n_max_pred = max(preds)
-
-            else:
-                ripper_n_pred = 0
-                ripper_n_max_pred= 0
         
+    
+        if algo == 'CORELS':
+        # Get predicates
+            praed_len = []
+            for i in range(len(estimator.rl().rules[0]["antecedents"])):
+                praed_len.append(len(estimator.rl().rules[i]["antecedents"]))
+                
+            ruleset_length = len(estimator.rl().rules)
+            praed_sum = sum(praed_len)
+            max_rule_praed = max(praed_len)
+
+    
+        
+
+
+        bacc = balanced_accuracy_score(y_test, y_pred, adjusted=True)
+        f2 = fbeta_score(y_test, y_pred, pos_label=CONFIG['POS_CLASS'], beta= 2)
+        acc = accuracy_score(y_test, y_pred)
+        # run binarizer
+        # run algo
+        # compute metrics
+        result[prefix+'_bacc'] = bacc
+        result[prefix+'_f2'] = f2
+        result[prefix+'_acc'] = acc
+        if algo == "RIPPER" or algo == "CORELS":
+            result[prefix+'_rule_length'] = ruleset_length
+            result[prefix+'_sum_praeds'] = praed_sum
+            result[prefix+'_max_rule_praed'] = max_rule_praed
+
+
     result_list.append(result)
+    result_df = pd.DataFrame(result_list)
+    result_df.to_csv('results.csv', sep=',')
+
+
     
-    metric_dict.update({config:{"Config":config,"ripper_t_bacc":ripper_t_bacc, "ripper_t_f2": ripper_t_f2,"ripper_t_acc":ripper_t_acc,"ripper_t_rl":ripper_t_rl,"ripper_t_pred":ripper_t_pred,"ripper_t_max_pred":ripper_t_max_pred, 
-                                                "brcg_t_bacc": brcg_t_bacc, "brcg_t_f2": brcg_t_f2,"brcg_t_acc":brcg_t_acc,"brcg_t_rl":brcg_t_rl,
-                                                "corels_t_bacc":corels_t_bacc, "corels_t_f2": corels_t_f2,"corels_t_acc":corels_t_acc,"corels_t_rl":corels_t_rl,
-                                                "ripper_q_bacc":ripper_q_bacc, "ripper_q_f2":ripper_q_f2,"ripper_q_acc":ripper_q_acc,"ripper_q_rl":ripper_q_rl,"ripper_q_pred":ripper_q_pred,"ripper_q_max_pred":ripper_q_max_pred, 
-                                                "brcg_q_bacc":brcg_q_bacc,"brcg_q_f2":brcg_q_f2,"brcg_q_acc":brcg_q_acc,"brcg_q_rl":brcg_q_rl,
-                                                "corels_q_bacc":corels_q_bacc,"corels_q_f2":corels_q_f2,"corels_q_acc": corels_q_bacc,"corels_q_rl":corels_q_rl,
-                                                "ripper_n_bacc": ripper_n_bacc, "ripper_n_f2": ripper_n_f2,"ripper_n_acc": ripper_n_bacc, "ripper_n_rl":ripper_n_rl,"ripper_n_pred":ripper_n_pred,"ripper_n_max_pred":ripper_n_max_pred}})
-    metric_list.append(metric_dict[config])
-   
-script_time_end = time.time()
-print('Training time: ' + str(script_time_end - script_time))
-
-result_df = pd.DataFrame(result_list)
-result_df.to_csv('results.csv', sep=',')
-
-df_list = []
-csv_list = []
-for i in range(len(CONFIG_LIST)):
-    
-    if CONFIG_LIST[i][1]['TYPE'] == "BINARY":
-        if CONFIG_LIST[i][1]["DATA_SET"] not in csv_list:
-            temp_df = pd.read_csv(CONFIG_LIST[i][1]["DATA_SET"])
-            csv_list.append(CONFIG_LIST[i][1]["DATA_SET"])
-            #temp_df = temp_df.drop(columns=CONFIG_LIST[i][1]['DROP'])
-            temp_df= temp_df.rename(columns={temp_df[CONFIG_LIST[i][1]['TARGET_LABEL']].name : 'TARGET_LABEL'})
-            df_list.append(temp_df)
-        
-eval_df = pd.DataFrame(csv_list, columns=['Data_Set'])
-eval_df["Target_1_pos"] = pd.Series('int32')
-eval_df["Target_2_neg"] = pd.Series('int32')
-eval_df["IB_Ratio"] = pd.Series()
-eval_df["Num_Feautures"] = pd.Series('int32')
-eval_df["Cat_Feautures"] = pd.Series('int32')
-eval_df["Size_row"] = pd.Series('int32')
-eval_df["Size_col"] = pd.Series('int32')
-
-# Trees
-eval_df["ripper_t_bacc"] = pd.Series()
-eval_df["ripper_t_f2"] = pd.Series()
-eval_df["ripper_t_acc"] = pd.Series()
-eval_df["ripper_t_rl"] = pd.Series()
-eval_df["ripper_t_pred"] = pd.Series()
-eval_df["ripper_t_max_pred"] = pd.Series()
-
-eval_df["brcg_t_bacc"] = pd.Series()
-eval_df["brcg_t_f2"] = pd.Series()
-eval_df["brcg_t_acc"] = pd.Series()
-eval_df["brcg_t_rl"] = pd.Series()
-
-eval_df["corels_t_bacc"] = pd.Series()
-eval_df["corels_t_f2"] = pd.Series()
-eval_df["corels_t_acc"] = pd.Series()
-eval_df["corels_t_rl"] = pd.Series()
-
-# Quantile
-eval_df["ripper_q_bacc"] = pd.Series()
-eval_df["ripper_q_f2"] = pd.Series()
-eval_df["ripper_q_acc"] = pd.Series()
-eval_df["ripper_q_rl"] = pd.Series()
-eval_df["ripper_q_pred"] = pd.Series()
-eval_df["ripper_q_max_pred"] = pd.Series()
-
-eval_df["brcg_q_bacc"] = pd.Series()
-eval_df["brcg_q_f2"] = pd.Series()
-eval_df["brcg_q_acc"] = pd.Series()
-eval_df["brcg_q_rl"] = pd.Series()
-
-eval_df["corels_q_bacc"] = pd.Series()
-eval_df["corels_q_f2"] = pd.Series()
-eval_df["corels_q_acc"] = pd.Series()
-eval_df["corels_q_rl"] = pd.Series()
-
-# Ripper Native
-eval_df["ripper_n_bacc"] = pd.Series()
-eval_df["ripper_n_f2"] = pd.Series()
-eval_df["ripper_n_acc"] = pd.Series()
-eval_df["ripper_n_rl"] = pd.Series()
-eval_df["ripper_n_pred"] = pd.Series()
-eval_df["ripper_n_max_pred"] = pd.Series()
-        
-            
-
-for frame in range(len(df_list)):
-    
-    metric = df_list[frame]["TARGET_LABEL"].value_counts()
-
-    # Imbalanced Ratio = minor class
-    if metric[0] > metric[1]:
-        eval_df["Target_1_pos"].iloc[frame] = metric[1]
-        eval_df["Target_2_neg"].iloc[frame] = metric[0]
-    else:
-        eval_df["Target_1_pos"].iloc[frame] = metric[0]
-        eval_df["Target_2_neg"].iloc[frame] = metric[1]
-        
-    df_size_row = len(df_list[frame])
-    df_size_col = len(df_list[frame].columns)
-    df_num_feauture =  len(df_list[frame].select_dtypes(include=['int64', 'float64']).columns)
-    df_cat_feauture =   len(df_list[frame].select_dtypes(include=['object']).columns)
-
-    eval_df["IB_Ratio"].iloc[frame] = eval_df["Target_1_pos"].iloc[frame]/eval_df["Target_2_neg"].iloc[frame]
-    eval_df["Size_row"].iloc[frame]   = df_size_row
-    eval_df["Size_col"].iloc[frame]   = df_size_col
-    
-    eval_df["Num_Feautures"].iloc[frame] = df_num_feauture
-    eval_df["Cat_Feautures"].iloc[frame] = df_cat_feauture
-
-    # adding Metrics Trees
-    eval_df["ripper_t_bacc"].iloc[frame] = metric_list[frame]["ripper_t_bacc"]
-    eval_df["ripper_t_f2"].iloc[frame] = metric_list[frame]["ripper_t_f2"]
-    eval_df["ripper_t_acc"].iloc[frame] = metric_list[frame]["ripper_t_acc"]
-    eval_df["ripper_t_rl"].iloc[frame] = metric_list[frame]["ripper_t_rl"]
-    eval_df["ripper_t_pred"].iloc[frame] = metric_list[frame]["ripper_t_pred"]
-    eval_df["ripper_t_max_pred"].iloc[frame] = metric_list[frame]["ripper_t_max_pred"]
-    
-
-
-    eval_df["brcg_t_bacc"].iloc[frame] = metric_list[frame]["brcg_t_bacc"]
-    eval_df["brcg_t_f2"].iloc[frame] = metric_list[frame]["brcg_t_f2"]
-    eval_df["brcg_t_acc"].iloc[frame] = metric_list[frame]["brcg_t_acc"]
-    eval_df["brcg_t_rl"].iloc[frame] = metric_list[frame]["brcg_t_rl"]
-
-    eval_df["corels_t_bacc"].iloc[frame] = metric_list[frame]["corels_t_bacc"]
-    eval_df["corels_t_f2"].iloc[frame] = metric_list[frame]["corels_t_f2"]
-    eval_df["corels_t_acc"].iloc[frame] = metric_list[frame]["corels_t_acc"]
-    eval_df["corels_t_rl"].iloc[frame] = metric_list[frame]["corels_t_rl"]
-
-    # adding Metrics Qunatile
-    eval_df["ripper_q_bacc"].iloc[frame] =  metric_list[frame]["ripper_q_bacc"]
-    eval_df["ripper_q_f2"].iloc[frame] = metric_list[frame]["ripper_q_f2"]
-    eval_df["ripper_q_acc"].iloc[frame] = metric_list[frame]["ripper_q_acc"]
-    eval_df["ripper_q_rl"].iloc[frame] = metric_list[frame]["ripper_q_rl"]
-    eval_df["ripper_q_pred"].iloc[frame] = metric_list[frame]["ripper_q_pred"]
-    eval_df["ripper_q_max_pred"].iloc[frame] = metric_list[frame]["ripper_q_max_pred"]
-
-    eval_df["brcg_q_bacc"].iloc[frame] = metric_list[frame]["brcg_q_bacc"]
-    eval_df["brcg_q_f2"].iloc[frame] = metric_list[frame]["brcg_q_f2"]
-    eval_df["brcg_q_acc"].iloc[frame] = metric_list[frame]["brcg_q_acc"]
-    eval_df["brcg_q_rl"].iloc[frame] = metric_list[frame]["brcg_q_rl"]
-    
-
-    eval_df["corels_q_bacc"].iloc[frame] =  metric_list[frame]["corels_q_bacc"]
-    eval_df["corels_q_f2"].iloc[frame] =  metric_list[frame]["corels_q_f2"]
-    eval_df["corels_q_acc"].iloc[frame] =  metric_list[frame]["corels_q_acc"]
-    eval_df["corels_q_rl"].iloc[frame] =  metric_list[frame]["corels_q_rl"]
-
-    # adding Metrics Ripper Native
-    eval_df["ripper_n_bacc"].iloc[frame] = metric_list[frame]["ripper_n_bacc"]
-    eval_df["ripper_n_f2"].iloc[frame] = metric_list[frame]["ripper_n_f2"]
-    eval_df["ripper_n_acc"].iloc[frame] = metric_list[frame]["ripper_n_acc"]
-    eval_df["ripper_n_rl"].iloc[frame] = metric_list[frame]["ripper_n_rl"]
-    eval_df["ripper_n_pred"].iloc[frame] = metric_list[frame]["ripper_n_pred"]
-    eval_df["ripper_n_max_pred"].iloc[frame] = metric_list[frame]["ripper_n_max_pred"]
-
-
-eval_df.to_csv("test6.csv",sep =",")
