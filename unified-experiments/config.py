@@ -194,6 +194,20 @@ config_dict= {"CONFIG1" : {
 'BASELINE': True,
 'USECASE': None
 },
+"CONFIG99" : { 
+'NAME' : 'taiwan_binary', 
+'DATA_SET': '../data/TaiwanCreditData.csv',
+'DATA_TYPES': {'Amount': float, 'Age': float, 'Bill_Sep': float, 'Bill_Aug': float, 'Bill_Jul': float, 'Bill_Jun': float, 'Bill_May': float, 'Bill_Apr': float, 'PayAmount_Sep': float, 'PayAmount_Aug': float, 'PayAmount_Jul': float, 'PayAmount_Jun': float, 'PayAmount_May': float, 'PayAmount_Apr': float},
+'DROP': ["Probabilities"],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'TREES',
+'ALGO': 'RIPPER',
+'TARGET_LABEL': 'DefaultNextMonth',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'PayAmount_Apr',
+'POS_CLASS': 1,
+},
 "CONFIG13" : { 
 'NAME' : 'heloc', 
 'DATA_SET': '../data/heloc.csv',
@@ -1190,6 +1204,21 @@ config_dict_imbalanced= {"CONFIG-I1" : {
 'BASELINE': False,
 'UNDERSAMP': False,
 'ONEHOT': False
+},
+
+"CONFIG-I99" : { 
+'NAME' : 'german-credit', 
+'DATA_SET': '../data/german_credit_codiert.csv',
+'DATA_TYPES': {'Duration in Month': float, 'Credit Amount': float, 'Installmentrate %': float, 'PresentResidence': float, 'Age in years': float, 'Number existing Credits': float, 'Number people liable': float},
+'DROP': ['Index'],
+'MODE': 'PREDICTIVE',
+'TRAIN_TEST_SPLIT': 0.3,
+'BINARIZER': 'TREES',
+'ALGO': 'BRCG',
+'TARGET_LABEL': 'Target',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'Credit Amount',
+'POS_CLASS': 0
 },
 
 
