@@ -94,9 +94,4 @@ CONFIG_DICT_IMBALANCED = {
 
 }
 
-
-CONFIG_LIST = []
-
-for config in CONFIG_DICT_IMBALANCED.items():
-    CONFIG_LIST.append(config)
     
