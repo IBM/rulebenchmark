@@ -101,8 +101,7 @@ for config in CONFIG_DICT_IMBALANCED:
                 warnings.simplefilter("ignore")               
                 estimator.fit(x_train_bin, y_train)
         elif algo == 'CORELS':
-            estimator = CorelsClassifier(n_iter=10000, max_card=2, c = 0.0001, verbosity=[])
-            # TODO Why these parameters?
+            estimator = CorelsClassifier(verbosity=[]) # n_iter=10000, max_card=2, c = 0.0001, 
             estimator.fit(x_train_bin, y_train, prediction_name=CONFIG["TARGET_LABEL"])
             # TODO Why do we specify the target label here?
 
