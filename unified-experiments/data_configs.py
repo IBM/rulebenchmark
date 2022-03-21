@@ -108,6 +108,17 @@ CONFIG_DICT_IMBALANCED = {
 'POS_CLASS': 0
 },
 
+"CONFIG-I11" : { 
+'NAME' : 'binary-churn-quantile-brcg', 
+'DATA_SET': '../data/churn_prob_out_35.csv',
+'DATA_TYPES': {'Children': float, 'RatePlan': str},
+'DROP': ['Id', 'pChurn', '3_Class', '5_Class', 'is_test_set'],
+'TARGET_LABEL': 'CHURN',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'Est Income',
+'POS_CLASS': 'T'
+}
+
 
 
 }
