@@ -3,6 +3,17 @@
 
 CONFIG_DICT_IMBALANCED = {
 
+"CONFIG-I11" : { 
+'NAME' : 'binary-churn', 
+'DATA_SET': '../data/churn_prob_out_35.csv',
+'DATA_TYPES': {'Children': float, 'RatePlan': str},
+'DROP': ['Id', 'pChurn', '3_Class', '5_Class', 'is_test_set'],
+'TARGET_LABEL': 'CHURN',
+'TYPE' : 'BINARY',
+'EXAMPLE_FEATURE' : 'Est Income',
+'POS_CLASS': 'T'
+},
+
 "CONFIG-I1" : { 
 'NAME' : 'german-credit', 
 'DATA_SET': '../data/german_credit_codiert.csv',
@@ -90,15 +101,10 @@ CONFIG_DICT_IMBALANCED = {
  'TYPE' : 'BINARY',
  'EXAMPLE_FEATURE' : 'income',
  'POS_CLASS': False
- 
-
-
 },
 
-
-
 "CONFIG-I10" : { 
-'NAME' : 'compas-ripper', 
+'NAME' : 'compas', 
 'DATA_SET': '../data/compas.csv',
 'DATA_TYPES': {},
 'DROP': [],
@@ -106,17 +112,6 @@ CONFIG_DICT_IMBALANCED = {
 'TYPE' : 'BINARY',
 'EXAMPLE_FEATURE' : 'current-charge-degree',
 'POS_CLASS': 0
-},
-
-"CONFIG-I11" : { 
-'NAME' : 'binary-churn-quantile-brcg', 
-'DATA_SET': '../data/churn_prob_out_35.csv',
-'DATA_TYPES': {'Children': float, 'RatePlan': str},
-'DROP': ['Id', 'pChurn', '3_Class', '5_Class', 'is_test_set'],
-'TARGET_LABEL': 'CHURN',
-'TYPE' : 'BINARY',
-'EXAMPLE_FEATURE' : 'Est Income',
-'POS_CLASS': 'T'
 }
 
 
