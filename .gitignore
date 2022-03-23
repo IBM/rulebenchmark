@@ -1,2 +1,5 @@
 
 data/fraud_detection.csv
+.DS_Store
+unified-experiments/__pycache__/data_configs.cpython-36.pyc
+unified-experiments/__pycache__/config.cpython-36.pyc

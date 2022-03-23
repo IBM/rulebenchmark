@@ -1,4 +1,4 @@
-,Date,Rented Bike Count,Hour,Temperature(C),Humidity(%),Wind speed (m/s),Visibility (10m),Dew point temperature(C),Solar Radiation (MJ/m2),Rainfall(mm),Snowfall (cm),Seasons,Holiday,Functioning Day,Target
+,Date,Rented Bike Count,Hour,Temperature_C,Humidity_percent,Wind speed_m_per_s,Visibility_10m,Dew point temperature_C,Solar Radiation_MJ_per_m2,Rainfall_mm,Snowfall_cm,Seasons,Holiday,Functioning Day,Target
 0,01/12/2017,254,0,-5.2,37,2.2,2000,-17.6,0.0,0.0,0.0,Winter,No Holiday,Yes,0
 1,01/12/2017,204,1,-5.5,38,0.8,2000,-17.6,0.0,0.0,0.0,Winter,No Holiday,Yes,0
 2,01/12/2017,173,2,-6.0,39,1.0,2000,-17.7,0.0,0.0,0.0,Winter,No Holiday,Yes,0
