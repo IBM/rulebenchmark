@@ -7,6 +7,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import fbeta_score, precision_score, recall_score, accuracy_score, balanced_accuracy_score
 # matthews_corrcoef, confusion_matrix, f1_score,  r2_score, explained_variance_score, mean_absolute_error, max_error
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder
+from collections import defaultdict
+import re
 
 import time
 import warnings
@@ -20,8 +22,9 @@ from aix360i.algorithms.rule_induction.ripper import Ripper
 import aix360i.algorithms.rule_induction.r2n.r2n_algo as algo
 from aix360i.algorithms.rule_induction.r2n.training import train as train_R2N
 from corels import *
-#import wittgenstein as lw
 
+# Helper Functions
+#------------------------------------------------------------------------------------------------------------------#
 
 # For some rule induction algorithms the pos class is always value 1
 def convert(char):
@@ -29,6 +32,40 @@ def convert(char):
         return 1
     else:
         return 0
+
+# One Hot Encoding Function
+def one_hot_encode_category(df, categorial_index):
+                    d = defaultdict(LabelEncoder)
+                    # Encoding
+                    lecatdata = df[categorial_index].apply(lambda x: d[x.name].fit_transform(x))
+                    #One hot encoding with dummy variable
+                    dummyvars = pd.get_dummies(df[categorial_index])
+
+                    return dummyvars
+# IB Ratio Daniel
+def calculate_ib_ratio(target_labels):
+    if target_labels[0] > target_labels[1]:
+        result['Target_1_pos'] = target_labels[1]
+        result['Target_2_neg'] = target_labels[0]
+    else:
+        result['Target_1_pos'] = target_labels[0]
+        result['Target_2_neg'] = target_labels[1]
+
+    return result['Target_1_pos'] / result['Target_2_neg']
+
+def calculate_ib_ratio_pos(target_labels):
+    if target_labels[0] == target_labels.loc[CONFIG["POS_CLASS"]]:
+        result['Target_1_pos'] = target_labels[0]
+        result['Target_2_neg'] = target_labels[1]
+    
+    else:
+        result['Target_2_neg'] = target_labels[0]
+        result['Target_1_pos'] = target_labels[1]
+
+    return result['Target_1_pos'] / result['Target_2_neg']
+
+#------------------------------------------------------------------------------------------------------------------#
+
 
 PIPELINES = [('XGBPREP','XGBOOST'), ('NATIVE','R2N'), ('TREES','BRCG'), ('QUANTILE','BRCG'), 
 ('TREES','RIPPER'), ('QUANTILE','RIPPER'), ('NATIVE','RIPPER'), ('TREES','CORELS'), ('QUANTILE','CORELS')]
@@ -66,18 +103,18 @@ for index, config in enumerate(CONFIG_DICT_IMBALANCED):
         result['nof_num_features'] = len(df_from_file.select_dtypes(include=['int64', 'float64']).columns)
         #TODO We should make sure that int64 is treated in the same way by all pipelines - casting to object or float
         result['nof_cat_features'] = len(df_from_file.select_dtypes(include=['object']).columns)
+
         target_labels = df_from_file[CONFIG["TARGET_LABEL"]].value_counts()
-        if target_labels[0] > target_labels[1]:
-            result['Target_1_pos'] = target_labels[1]
-            result['Target_2_neg'] = target_labels[0]
-        else:
-            result['Target_1_pos'] = target_labels[0]
-            result['Target_2_neg'] = target_labels[1]
-        # TODO Use CONFIG['POS_CLASS'] for pos, not the minority class here
+        result['IB_ratio_minority'] = calculate_ib_ratio(target_labels)
+        result['IB_ratio_pos'] = calculate_ib_ratio_pos(target_labels)
+
+        result['use_Case'] = CONFIG["META_DATA"]["use_case"]
+        result['data_flag'] = CONFIG["META_DATA"]["flag"]
+        
 
         # TODO Add use case, and organic/synthetic flag
         
-        result['IB_Ratio'] = result['Target_1_pos'] / result['Target_2_neg']
+        
 
 
         df_from_file = df_from_file.drop(columns=CONFIG['DROP'])
@@ -93,7 +130,17 @@ for index, config in enumerate(CONFIG_DICT_IMBALANCED):
                 POS_CLASS = 1
             else:
                 POS_CLASS = CONFIG['POS_CLASS']
- 
+
+            # If XGboost we need the categorical and numerical data for the one hot Encoding function
+            if algo == "XGBOOST":
+                categorial_feat = df.select_dtypes(include=['object']).columns
+                numercial_feat = df.select_dtypes(include=['int64', 'float64']).columns
+                if categorial_feat.empty:
+                    df = df
+                else:
+                    dummyvars = one_hot_encode_category(df,categorial_feat)
+                    df = pd.concat([df[numercial_feat], dummyvars], axis = 1)
+
             x_train, x_test, y_train, y_test = train_test_split(
                 df.drop(columns=[CONFIG['TARGET_LABEL']]), 
                 df[CONFIG['TARGET_LABEL']], 
@@ -108,13 +155,13 @@ for index, config in enumerate(CONFIG_DICT_IMBALANCED):
             if bina == 'XGBPREP':
                 x_train_bin = x_train
                 x_test_bin = x_test
-                categorical_features = x_train_bin.select_dtypes(include=['object']).columns
-                for col in categorical_features:
-                    label_encoder = LabelEncoder()
-                    label_encoder = label_encoder.fit(df[col])
-                    # TODO didn't you use one-hot encoding before?
-                    x_train_bin[col] = label_encoder.transform(x_train_bin[col])
-                    x_test_bin[col] = label_encoder.transform(x_test_bin[col])
+                # Feauture Names are not allowed to contain , or < and must be strings
+                regex = re.compile(r"\[|\]|<", re.IGNORECASE)
+                x_train_bin.columns = [regex.sub("_", str(col)) if any(x in str(col) for x in set(('[', ']', '<'))) else col for col in x_train_bin.columns.values]
+                x_test_bin.columns = [regex.sub("_", str(col)) if any(x in str(col) for x in set(('[', ']', '<'))) else col for col in x_test_bin.columns.values]
+
+
+                
             elif bina == "TREES":
                 binarizer =  FeatureBinarizerFromTrees(negations=True, randomState=42) 
                 binarizer = binarizer.fit(x_train, y_train)
@@ -151,15 +198,14 @@ for index, config in enumerate(CONFIG_DICT_IMBALANCED):
             elif algo == 'BRCG':   
                 estimator = BRCG(silent=True)
                 with warnings.catch_warnings():
-                    warnings.simplefilter("ignore")
-                    # TODO Do we still need this warning filter?              
+                    warnings.simplefilter("ignore")   
                     estimator.fit(x_train_bin, y_train)
             elif algo == 'CORELS':
                 estimator = CorelsClassifier(verbosity=[]) # n_iter=10000, max_card=2, c = 0.0001, 
                 estimator.fit(x_train_bin, y_train, prediction_name=CONFIG["TARGET_LABEL"])             
             elif algo == 'R2N':
                 try:
-                    estimator = algo.R2Nalgo(n_seeds=3, max_epochs=100, decay_rate=0.998, coef = 10**-3, normalize_num=True)
+                    estimator = algo.R2Nalgo(n_seeds=2, max_epochs=5*10**2, min_temp = 10**-4, decay_rate=0.98, coef = 5*10**-4, normalize_num=True,negation=False)
                     estimator.fit(x_train_bin, y_train)
                 except Exception:
                     exception_caught = True
@@ -187,23 +233,9 @@ for index, config in enumerate(CONFIG_DICT_IMBALANCED):
                 result[prefix+'_recall'] = np.nan
                 result[prefix+'_precision'] = np.nan
 
-            if algo == 'RIPPER':
-                if len(estimator.rule_map.values()) == 0:
-                    # TODO this is a RIPPER trxf export bug that needs to be fixed
-                    nof_rules = 0
-                    preds_sum = 0
-                    preds_max = 0
-                    preds_avg = 0
-                else:
-                    rule_set = estimator.export_rules_to_trxf_dnf_ruleset(POS_CLASS)
-                    conjunctions = rule_set.list_conjunctions()
-                    nof_rules = len(conjunctions)
-                    conjunction_len = [conjunction.len() for conjunction in conjunctions]
-                    preds_sum = sum(conjunction_len)
-                    preds_max = max(conjunction_len)
-                    preds_avg = preds_sum/nof_rules
 
-            elif algo == 'BRCG':
+
+            if algo == 'BRCG' or algo == 'RIPPER':
                 rule_set  = estimator.explain()
                 conjunctions = rule_set.conjunctions
                 if len(conjunctions) == 0:
@@ -218,6 +250,29 @@ for index, config in enumerate(CONFIG_DICT_IMBALANCED):
                     preds_max = max(conjunction_len)
                     preds_avg = preds_sum/nof_rules
 
+            elif algo == 'R2N':
+                if exception_caught == True:
+                    nof_rules = 0
+                    preds_sum = 0
+                    preds_max = 0
+                    preds_avg = 0
+
+                else:
+                    rule_set  = estimator.export_rules_to_trxf_dnf_ruleset()
+                    conjunctions = rule_set.conjunctions
+                    if len(conjunctions) == 0:
+                        nof_rules = 0
+                        preds_sum = 0
+                        preds_max = 0
+                        preds_avg = 0
+                    else:
+                        conjunction_len = [conjunction.len() for conjunction in conjunctions]
+                        nof_rules = len(conjunctions)
+                        preds_sum = sum(conjunction_len)
+                        preds_max = max(conjunction_len)
+                        preds_avg = preds_sum/nof_rules
+            
+
             elif algo == 'CORELS':
                 # Get predicates
                 praed_len = []
@@ -227,9 +282,12 @@ for index, config in enumerate(CONFIG_DICT_IMBALANCED):
                 preds_sum = sum(praed_len)
                 preds_max = max(praed_len)
                 preds_avg = preds_sum/nof_rules
+
+            
+
                 
 
-            if algo == "RIPPER" or algo == "CORELS" or algo == "BRCG":
+            if algo == "RIPPER" or algo == "CORELS" or algo == "BRCG" or algo == "R2N":
                 result[prefix+'_nof_rules'] = nof_rules
                 result[prefix+'_sum_preds'] = preds_sum
                 result[prefix+'_max_preds'] = preds_max
@@ -243,7 +301,7 @@ for index, config in enumerate(CONFIG_DICT_IMBALANCED):
     else:
         print('Results precomputed.')
 
-    if index == 1:
+    if index == 10:
         break
         # Use for testing
 
