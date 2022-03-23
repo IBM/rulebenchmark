@@ -19,7 +19,7 @@ import xgboost as xgb
 from aix360.algorithms.rbm import FeatureBinarizer, FeatureBinarizerFromTrees # BRCGExplainer, 
 from aix360i.algorithms.rule_induction.rbm.boolean_rule_cg import BooleanRuleCG as BRCG
 from aix360i.algorithms.rule_induction.ripper import Ripper
-import aix360i.algorithms.rule_induction.r2n.r2n_algo as algo
+from aix360i.algorithms.rule_induction.r2n.r2n_algo import R2Nalgo
 from aix360i.algorithms.rule_induction.r2n.training import train as train_R2N
 from corels import *
 
@@ -125,7 +125,7 @@ for index, config in enumerate(CONFIG_DICT_IMBALANCED):
             df = df_from_file.copy() # at least RIPPER messes with the df, hence we draw a fresh copy
 
             # Preprocessing: normalizing data for specific algorithms
-            if algo in ('BRCG', 'XGBOOST', 'CORELS'): 
+            if algo in ('BRCG', 'XGBOOST', 'CORELS', 'R2N'): 
                 df[CONFIG['TARGET_LABEL']] = df[CONFIG['TARGET_LABEL']].map(convert)
                 POS_CLASS = 1
             else:
@@ -205,7 +205,7 @@ for index, config in enumerate(CONFIG_DICT_IMBALANCED):
                 estimator.fit(x_train_bin, y_train, prediction_name=CONFIG["TARGET_LABEL"])             
             elif algo == 'R2N':
                 try:
-                    estimator = algo.R2Nalgo(n_seeds=2, max_epochs=5*10**2, min_temp = 10**-4, decay_rate=0.98, coef = 5*10**-4, normalize_num=True,negation=False)
+                    estimator = R2Nalgo(n_seeds=2, max_epochs=5*10**2, min_temp = 10**-4, decay_rate=0.98, coef = 5*10**-4, normalize_num=True,negation=False)
                     estimator.fit(x_train_bin, y_train)
                 except Exception:
                     exception_caught = True
@@ -305,6 +305,6 @@ for index, config in enumerate(CONFIG_DICT_IMBALANCED):
         break
         # Use for testing
 
-result_df = pd.DataFrame(result_list)
-result_df.to_csv(RESULT_FILE, sep=',', index=False)
+    result_df = pd.DataFrame(result_list)
+    result_df.to_csv(RESULT_FILE, sep=',', index=False)
     
