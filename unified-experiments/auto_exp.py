@@ -302,7 +302,7 @@ for index, config in enumerate(CONFIG_DICT_IMBALANCED):
     else:
         print('Results precomputed.')
 
-    if index == 0:
+    if index == 14:
         break
         # Use for testing
 

@@ -4,17 +4,7 @@
 CONFIG_DICT_IMBALANCED = {
 
 
-"CONFIG-I14" : { 
-'NAME' : 'heloc', 
-'DATA_SET': '../data/heloc.csv',
-'DATA_TYPES': {'ExternalRiskEstimate': float, 'MSinceOldestTradeOpen': float, 'MSinceMostRecentTradeOpen': float, 'AverageMInFile': float, 'NumSatisfactoryTrades': float,'NumTrades60Ever2DerogPubRec': float, 'NumTrades90Ever2DerogPubRec': float, 'PercentTradesNeverDelq': float, 'MSinceMostRecentDelq': float, 'MaxDelq2PublicRecLast12M': float,'MaxDelqEver': float, 'NumTotalTrades': float, 'NumTradesOpeninLast12M': float, 'PercentInstallTrades': float, 'MSinceMostRecentInqexcl7days': float,'NumInqLast6M': float, 'NumInqLast6Mexcl7days': float, 'NetFractionRevolvingBurden': float, 'NetFractionInstallBurden': float, 'NumRevolvingTradesWBalance': float,'NumInstallTradesWBalance': float, 'NumBank2NatlTradesWHighUtilization': float, 'PercentTradesWBalance': float},
-'DROP': ['Probabilities'],
-'TARGET_LABEL': 'RiskPerformance',
-'EXAMPLE_FEATURE' : 'ExternalRiskEstimate',
-'POS_CLASS': "Good",
-'META_DATA': {'use_case': "credit_risk",'flag': "organic"}
-
-},    
+   
 
 "CONFIG-I1" : { 
 'NAME' : 'mushroom', 
@@ -179,7 +169,19 @@ CONFIG_DICT_IMBALANCED = {
  'EXAMPLE_FEATURE' : 'income',
  'POS_CLASS': False,
 'META_DATA': {'use_case': "loan_approval",'flag': "synthetic"}
-}
+},
+
+"CONFIG-I14" : { 
+'NAME' : 'heloc', 
+'DATA_SET': '../data/heloc.csv',
+'DATA_TYPES': {'ExternalRiskEstimate': float, 'MSinceOldestTradeOpen': float, 'MSinceMostRecentTradeOpen': float, 'AverageMInFile': float, 'NumSatisfactoryTrades': float,'NumTrades60Ever2DerogPubRec': float, 'NumTrades90Ever2DerogPubRec': float, 'PercentTradesNeverDelq': float, 'MSinceMostRecentDelq': float, 'MaxDelq2PublicRecLast12M': float,'MaxDelqEver': float, 'NumTotalTrades': float, 'NumTradesOpeninLast12M': float, 'PercentInstallTrades': float, 'MSinceMostRecentInqexcl7days': float,'NumInqLast6M': float, 'NumInqLast6Mexcl7days': float, 'NetFractionRevolvingBurden': float, 'NetFractionInstallBurden': float, 'NumRevolvingTradesWBalance': float,'NumInstallTradesWBalance': float, 'NumBank2NatlTradesWHighUtilization': float, 'PercentTradesWBalance': float},
+'DROP': ['Probabilities'],
+'TARGET_LABEL': 'RiskPerformance',
+'EXAMPLE_FEATURE' : 'ExternalRiskEstimate',
+'POS_CLASS': "Good",
+'META_DATA': {'use_case': "credit_risk",'flag': "organic"}
+
+},
 
 
 
