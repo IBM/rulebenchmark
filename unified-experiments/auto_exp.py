@@ -3,6 +3,19 @@ import pandas as pd
 import numpy as np
 from statistics import mean
 
+
+import torch
+import numpy as np
+
+
+
+
+import torch
+import numpy as np
+
+
+
+
 from sklearn.model_selection import train_test_split 
 from sklearn.metrics import fbeta_score, precision_score, recall_score, accuracy_score, balanced_accuracy_score
 # matthews_corrcoef, confusion_matrix, f1_score,  r2_score, explained_variance_score, mean_absolute_error, max_error
@@ -19,7 +32,7 @@ import xgboost as xgb
 from aix360.algorithms.rbm import FeatureBinarizer, FeatureBinarizerFromTrees # BRCGExplainer, 
 from aix360i.algorithms.rule_induction.rbm.boolean_rule_cg import BooleanRuleCG as BRCG
 from aix360i.algorithms.rule_induction.ripper import Ripper
-import aix360i.algorithms.rule_induction.r2n.r2n_algo as algo
+from aix360i.algorithms.rule_induction.r2n.r2n_algo import R2Nalgo
 from aix360i.algorithms.rule_induction.r2n.training import train as train_R2N
 from corels import *
 
@@ -57,7 +70,7 @@ def calculate_ib_ratio_pos(target_labels):
     if target_labels[0] == target_labels.loc[CONFIG["POS_CLASS"]]:
         result['Target_1_pos'] = target_labels[0]
         result['Target_2_neg'] = target_labels[1]
-    
+
     else:
         result['Target_2_neg'] = target_labels[0]
         result['Target_1_pos'] = target_labels[1]
@@ -101,7 +114,6 @@ for index, config in enumerate(CONFIG_DICT_IMBALANCED):
         result['nof_rows'] = len(df_from_file)
         result['nof_col'] = len(df_from_file.columns)
         result['nof_num_features'] = len(df_from_file.select_dtypes(include=['int64', 'float64']).columns)
-        #TODO We should make sure that int64 is treated in the same way by all pipelines - casting to object or float
         result['nof_cat_features'] = len(df_from_file.select_dtypes(include=['object']).columns)
 
         target_labels = df_from_file[CONFIG["TARGET_LABEL"]].value_counts()
@@ -112,11 +124,6 @@ for index, config in enumerate(CONFIG_DICT_IMBALANCED):
         result['data_flag'] = CONFIG["META_DATA"]["flag"]
         
 
-        # TODO Add use case, and organic/synthetic flag
-        
-        
-
-
         df_from_file = df_from_file.drop(columns=CONFIG['DROP'])
         
         for (bina, algo) in PIPELINES:
@@ -125,7 +132,7 @@ for index, config in enumerate(CONFIG_DICT_IMBALANCED):
             df = df_from_file.copy() # at least RIPPER messes with the df, hence we draw a fresh copy
 
             # Preprocessing: normalizing data for specific algorithms
-            if algo in ('BRCG', 'XGBOOST', 'CORELS'): 
+            if algo in ('BRCG', 'XGBOOST', 'CORELS', 'R2N'): 
                 df[CONFIG['TARGET_LABEL']] = df[CONFIG['TARGET_LABEL']].map(convert)
                 POS_CLASS = 1
             else:
@@ -167,14 +174,17 @@ for index, config in enumerate(CONFIG_DICT_IMBALANCED):
                 binarizer = binarizer.fit(x_train, y_train)
                 x_train_bin = binarizer.transform(x_train) 
                 x_test_bin = binarizer.transform(x_test)
+                result[prefix + '_train_bina_cols'] = len(x_train_bin.columns)
             elif bina == "QUANTILE":
                 binarizer =  FeatureBinarizer(numThresh=9,negations=True, randomState=42) 
                 binarizer = binarizer.fit(x_train)
                 x_train_bin = binarizer.transform(x_train) 
                 x_test_bin = binarizer.transform(x_test)
+                result[prefix + '_train_bina_cols'] = len(x_train_bin.columns)
             elif bina == "NATIVE":
                 x_train_bin = x_train
                 x_test_bin = x_test
+                result[prefix + '_train_bina_cols'] = len(x_train_bin.columns)
 
             # Part 2: Adapter: Binarizer -> Rule Induction
             if bina in ['TREES', 'QUANTILE'] and algo == 'RIPPER':
@@ -187,7 +197,7 @@ for index, config in enumerate(CONFIG_DICT_IMBALANCED):
                 x_test_bin.columns = pd.Index(np.arange(1,len(x_test_bin.columns)+1).astype(str))
             
             # Part 3: Run Rule Induction 
-            exception_caught = False
+            training_exception = False
 
             if algo == 'XGBOOST':        
                 estimator = xgb.XGBClassifier(use_label_encoder=False)
@@ -205,22 +215,32 @@ for index, config in enumerate(CONFIG_DICT_IMBALANCED):
                 estimator.fit(x_train_bin, y_train, prediction_name=CONFIG["TARGET_LABEL"])             
             elif algo == 'R2N':
                 try:
-                    estimator = algo.R2Nalgo(n_seeds=2, max_epochs=5*10**2, min_temp = 10**-4, decay_rate=0.98, coef = 5*10**-4, normalize_num=True,negation=False)
+                    estimator = R2Nalgo(n_seeds=2, max_epochs=5*10**2, min_temp = 10**-4, decay_rate=0.98, coef = 5*10**-4, normalize_num=True,negation=False)
                     estimator.fit(x_train_bin, y_train)
                 except Exception:
                     exception_caught = True
+            
 
             end_time = time.time()
             training_time = end_time - start_time
-            result[prefix+'_runtime'] = training_time
-            if exception_caught:
+            if training_exception:
                 print('Training failed.')
+                result[prefix+'_runtime'] = np.nan
             else:
                 print('Finished training successfully in {} seconds.'.format(str(training_time)))
+                result[prefix+'_runtime'] = training_time
+
 
             # Part 4: Evaluation
-            if not exception_caught:
-                y_pred = estimator.predict(x_test_bin)
+            prediction_exception = False
+            if not training_exception:
+                try:
+                    y_pred = estimator.predict(x_test_bin)
+                except Exception:
+                    print('\t Exception in prediction')
+                    prediction_exception = True
+            if not (training_exception or prediction_exception):
+    
                 result[prefix+'_acc'] = accuracy_score(y_test, y_pred)
                 result[prefix+'_adj_bal_acc'] = balanced_accuracy_score(y_test, y_pred, adjusted=True)
                 result[prefix+'_recall'] = recall_score(y_test, y_pred, pos_label=POS_CLASS)
@@ -234,42 +254,25 @@ for index, config in enumerate(CONFIG_DICT_IMBALANCED):
                 result[prefix+'_precision'] = np.nan
 
 
-
-            if algo == 'BRCG' or algo == 'RIPPER':
-                rule_set  = estimator.explain()
-                conjunctions = rule_set.conjunctions
-                if len(conjunctions) == 0:
-                    nof_rules = 0
-                    preds_sum = 0
-                    preds_max = 0
-                    preds_avg = 0
+            if algo in ('RIPPER', 'BRCG', 'R2N'):
+                export_exception = False
+                if algo in ('RIPPER', 'BRCG'):
+                    rule_set = estimator.explain()
                 else:
-                    conjunction_len = [conjunction.len() for conjunction in conjunctions]
+                    try:
+                        rule_set = estimator.export_rules_to_trxf_dnf_ruleset()
+                    except Exception:
+                        print('\t Exception in trxf export.')
+                        export_exception = True
+                if not export_exception:
+                    conjunctions = rule_set.list_conjunctions()
                     nof_rules = len(conjunctions)
+                    conjunction_len = [conjunction.len() for conjunction in conjunctions]
                     preds_sum = sum(conjunction_len)
-                    preds_max = max(conjunction_len)
-                    preds_avg = preds_sum/nof_rules
-
-            elif algo == 'R2N':
-                if exception_caught == True:
-                    nof_rules = 0
-                    preds_sum = 0
-                    preds_max = 0
-                    preds_avg = 0
-
-                else:
-                    rule_set  = estimator.export_rules_to_trxf_dnf_ruleset()
-                    conjunctions = rule_set.conjunctions
-                    if len(conjunctions) == 0:
-                        nof_rules = 0
-                        preds_sum = 0
-                        preds_max = 0
+                    preds_max = max(conjunction_len, default=0)
+                    if nof_rules == 0:
                         preds_avg = 0
                     else:
-                        conjunction_len = [conjunction.len() for conjunction in conjunctions]
-                        nof_rules = len(conjunctions)
-                        preds_sum = sum(conjunction_len)
-                        preds_max = max(conjunction_len)
                         preds_avg = preds_sum/nof_rules
             
 
@@ -283,11 +286,9 @@ for index, config in enumerate(CONFIG_DICT_IMBALANCED):
                 preds_max = max(praed_len)
                 preds_avg = preds_sum/nof_rules
 
-            
 
-                
 
-            if algo == "RIPPER" or algo == "CORELS" or algo == "BRCG" or algo == "R2N":
+            if algo in ('RIPPER', 'BRCG', 'R2N', 'CORELS') and not(training_exception or prediction_exception or export_exception):
                 result[prefix+'_nof_rules'] = nof_rules
                 result[prefix+'_sum_preds'] = preds_sum
                 result[prefix+'_max_preds'] = preds_max
@@ -301,10 +302,13 @@ for index, config in enumerate(CONFIG_DICT_IMBALANCED):
     else:
         print('Results precomputed.')
 
-    if index == 10:
+    if index == 0:
         break
         # Use for testing
 
 result_df = pd.DataFrame(result_list)
 result_df.to_csv(RESULT_FILE, sep=',', index=False)
-    
+
+script_end_time = time.time()
+script_time = script_end_time - script_start_time
+print('Job finished at {} in {} seconds.'.format(time.ctime(), script_time))
