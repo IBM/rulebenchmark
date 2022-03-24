@@ -3,6 +3,19 @@
 
 CONFIG_DICT_IMBALANCED = {
 
+    
+"CONFIG-I11" : { 
+'NAME' : 'heloc', 
+'DATA_SET': '../data/heloc.csv',
+'DATA_TYPES': {},
+'DROP': ['Probabilities'],
+'TARGET_LABEL': 'RiskPerformance',
+'EXAMPLE_FEATURE' : 'ExternalRiskEstimate',
+'POS_CLASS': "Good",
+'META_DATA': {'use_case': "credit_risk",'flag': "organic"}
+
+},
+
 "CONFIG-I8" : { 
  'NAME' : 'bike_imbalanced', 
  'DATA_SET': '../data/binary_bike_imbalanced.csv',
