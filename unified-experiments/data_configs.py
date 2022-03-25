@@ -33,7 +33,7 @@ CONFIG_DICT_IMBALANCED = {
 
 
  "CONFIG-I3" : { 
- 'NAME' : 'bike_imbalanced', 
+ 'NAME' : 'bike', 
  'DATA_SET': '../data/binary_bike.csv',
  'DATA_TYPES': {'Rented Bike Count': float, 'Hour': float,'Humidity_percent': float,'Visibility_10m': float},
  'DROP': ["Unnamed: 0","Rented Bike Count"],
@@ -107,17 +107,6 @@ CONFIG_DICT_IMBALANCED = {
 },
 
 
- "CONFIG-I9" : { 
- 'NAME' : 'fraud_detection', 
- 'DATA_SET': '../data/fraud_detection.csv',
- 'DATA_TYPES': {'Amount': float, 'Age': float, 'Bill_Sep': float, 'Bill_Aug': float, 'Bill_Jul': float, 'Bill_Jun': float, 'Bill_May': float, 'Bill_Apr': float, 'PayAmount_Sep': float, 'PayAmount_Aug': float, 'PayAmount_Jul': float, 'PayAmount_Jun': float, 'PayAmount_May': float, 'PayAmount_Apr': float},
- 'DROP': [],
- 'TARGET_LABEL': 'Class',
- 'TYPE' : 'BINARY',
- 'EXAMPLE_FEATURE' : 'V6',
- 'POS_CLASS': 1,
-'META_DATA': {'use_case': "fraud_detection",'flag': "organic"}
- },
 
 
 
